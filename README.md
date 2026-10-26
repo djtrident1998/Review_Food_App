@@ -1,25 +1,52 @@
-# CODING AGENTS: READ THIS FIRST
+# Plate Index
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+A restaurant discovery and review site for Bengaluru, built from the Claude Design hand-off in `project/Plate Index v2.dc.html`. Browse ten kitchens, filter by cuisine, rating, price and diet, and post star ratings and reviews that every visitor can read.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+- **Frontend:** Vite + React (`src/`), styled with the Modernist tokens from the design.
+- **API:** Vercel serverless functions (`api/`) backed by Upstash Redis.
+- **Shared code:** the restaurant catalogue, sample reviews and review validation (`lib/`) run in both the browser and the API.
 
-## What you should do — IMPORTANT
+## Deploy to Vercel
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+1. Push this repo to GitHub, then in Vercel choose **Add New → Project** and import it. The defaults are already set in `vercel.json` (Vite, `npm run build`, output `dist`).
+2. In the new project, open **Storage → Create Database → Upstash (Redis)** and connect it to the project. This adds `KV_REST_API_URL` and `KV_REST_API_TOKEN`.
+3. Optional: under **Settings → Environment Variables**, add `ADMIN_TOKEN` with a long random value (at least 12 characters).
+4. Redeploy so the functions pick up the variables.
 
-**Read `project/Plate Index v2.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+On the first request the API loads the 38 sample reviews from the design. Until Redis is connected, the site still works, but each visitor's reviews are saved in their own browser only, and a notice says so.
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+## Run locally
 
-## About the design files
+```bash
+npm install
+npm run serve:local   # builds, then serves the site and API at http://localhost:3000
+```
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+`serve:local` uses an in-memory store unless `KV_REST_API_URL` and `KV_REST_API_TOKEN` are set, so local data disappears when you stop it. `npm run dev` runs the Vite dev server for frontend work. It has no API, so the app falls back to browser-only storage.
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+## How it works
 
-## Bundle contents
+| Endpoint | What it does |
+| --- | --- |
+| `GET /api/state` | All reviews with helpful counts, plus which ones you voted on, reported or wrote |
+| `POST /api/reviews` | Post a review |
+| `PUT /api/reviews?id=` | Edit your own review |
+| `DELETE /api/reviews?id=` | Delete your own review (the admin can delete any) |
+| `POST /api/vote` | Toggle your helpful vote (not on your own review) |
+| `POST /api/report` | Report a review |
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Plate Index restaurant review app` project files (HTML prototypes, assets, components)
+- **Identity:** each browser gets a random key, kept in `localStorage` and sent as `x-plate-key`. The server stores only a hash of it as the author id, so nobody can edit, delete or vote as someone else. Clearing site data means losing edit rights to your old reviews.
+- **Moderation:** open the site with `#admin=<ADMIN_TOKEN>` once. That browser can then delete any review and see how many times each one was reported.
+- **Limits:** 30 writes a minute per browser, 5,000 reviews in total, and up to 3 photos per review. Photos are resized in the browser before upload.
+- **Saved restaurants** stay in each visitor's browser.
+- **The site refreshes reviews** every 20 seconds and whenever the tab regains focus.
+
+## Not done yet
+
+- **Food photos:** restaurant, cuisine and dish images are coloured placeholder plates. The design's Wikimedia photos couldn't be downloaded from the build environment. Drop images into `public/` and swap the `Plate` component in `src/main.js` to use them.
+- **Add-a-restaurant form:** not built. The catalogue is fixed in `lib/catalog.js`.
+
+## Other folders
+
+- `project/`, `chats/`, `HANDOFF.md`: the original Claude Design hand-off.
+- `artifact/plate-index.html`: the earlier single-file version published as a claude.ai artifact.

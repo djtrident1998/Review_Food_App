@@ -1,0 +1,902 @@
+<title>Plate Index</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap">
+<style>
+/* Layout: food-app grid of rounded photo cards over the Modernist ink-on-ground palette; red accent only for stars and primary actions. */
+:root {
+  --color-bg: #f3f2f2;
+  --color-surface: #eae9e9;
+  --color-card: #ffffff;
+  --color-glass: rgba(255,255,255,.92);
+  --color-text: #201e1d;
+  --color-on-ink: #f3f2f2;
+  --color-accent: #ec3013;
+  --color-divider: color-mix(in srgb, #201e1d 40%, transparent);
+  --color-neutral-100: #f8f4f4; --color-neutral-200: #eae7e7; --color-neutral-300: #d7d3d3;
+  --color-neutral-400: #bab6b6; --color-neutral-500: #9b9797; --color-neutral-600: #7d7979;
+  --color-neutral-700: #605d5d; --color-neutral-800: #444141; --color-neutral-900: #2d2b2b;
+  --color-accent-100: #fff2ef; --color-accent-200: #ffe0d9; --color-accent-600: #dd2b0f;
+  --color-accent-700: #ae1800; --color-accent-800: #7c1405;
+  --tone-good: oklch(0.50 0.12 150); --tone-good-fg: #fff;
+  --tone-mid: oklch(0.82 0.14 82); --tone-mid-fg: #201e1d;
+  --tone-low: #ae1800; --tone-low-fg: #fff;
+  --scrim: rgba(20,18,17,.78);
+  --font-heading: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
+  --shadow-md: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --color-bg: #151312; --color-surface: #24201f; --color-card: #1d1a19; --color-glass: rgba(29,26,25,.9);
+  --color-text: #f1edeb; --color-on-ink: #151312; --color-accent: #ff563c;
+  --color-divider: color-mix(in srgb, #f1edeb 32%, transparent);
+  --color-neutral-100: #2a2625; --color-neutral-200: #322d2c; --color-neutral-300: #443f3e;
+  --color-neutral-400: #5e5857; --color-neutral-500: #7d7776; --color-neutral-600: #9b9594;
+  --color-neutral-700: #b8b2b1; --color-neutral-800: #d6d0cf; --color-neutral-900: #ece6e5;
+  --color-accent-100: #3a1a14; --color-accent-200: #4d1f16; --color-accent-600: #ff6a52;
+  --color-accent-700: #ff8a75; --color-accent-800: #ffc4b8;
+  --tone-good: oklch(0.58 0.12 150); --tone-mid: oklch(0.80 0.14 82); --tone-low: #d8391f;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.5); --shadow-md: 0 3px 10px rgba(0,0,0,.5); --shadow-lg: 0 12px 32px rgba(0,0,0,.6);
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --color-bg: #151312; --color-surface: #24201f; --color-card: #1d1a19; --color-glass: rgba(29,26,25,.9);
+  --color-text: #f1edeb; --color-on-ink: #151312; --color-accent: #ff563c;
+  --color-divider: color-mix(in srgb, #f1edeb 32%, transparent);
+  --color-neutral-100: #2a2625; --color-neutral-200: #322d2c; --color-neutral-300: #443f3e;
+  --color-neutral-400: #5e5857; --color-neutral-500: #7d7776; --color-neutral-600: #9b9594;
+  --color-neutral-700: #b8b2b1; --color-neutral-800: #d6d0cf; --color-neutral-900: #ece6e5;
+  --color-accent-100: #3a1a14; --color-accent-200: #4d1f16; --color-accent-600: #ff6a52;
+  --color-accent-700: #ff8a75; --color-accent-800: #ffc4b8;
+  --tone-good: oklch(0.58 0.12 150); --tone-mid: oklch(0.80 0.14 82); --tone-low: #d8391f;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.5); --shadow-md: 0 3px 10px rgba(0,0,0,.5); --shadow-lg: 0 12px 32px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--color-glass); }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 800; line-height: 1.12; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+h3 { font-size: 25px; } h4 { font-size: 20px; } h5 { font-size: 17px; }
+h6, .eyebrow { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.muted { color: var(--color-neutral-700); }
+.label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--color-neutral-700); }
+.kicker { color: var(--color-accent-700); }
+.display { margin: 0; font-size: clamp(34px, 7vw, 64px); line-height: 0.95; letter-spacing: -0.035em; }
+.panel { background: var(--color-card); border-radius: 20px; box-shadow: var(--shadow-sm); }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; font-family: var(--font-heading); font-weight: 800; font-size: 14px; line-height: 1.2; color: var(--color-text); background: transparent; border: 1px solid transparent; padding: 8px 14px; border-radius: 12px; min-height: 44px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--color-accent); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--color-accent-600); }
+.btn-primary:active:not(:disabled) { background: var(--color-accent-700); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-ghost { color: var(--color-accent-700); padding-inline: 8px; }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.btn-ink { color: var(--color-text); }
+.pill { border-radius: 999px; }
+
+/* forms */
+.input { width: 100%; min-height: 44px; padding: 6px 12px; font-size: 14px; color: var(--color-text); caret-color: var(--color-accent); background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: 12px; }
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.input { min-height: 130px; resize: vertical; padding-block: 10px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field > label, .flabel { font-size: 12px; color: color-mix(in srgb, var(--color-text) 72%, transparent); }
+.req { color: var(--color-accent-700); }
+.opt { color: var(--color-neutral-600); }
+.err { font-size: 13px; color: var(--color-accent-700); }
+.seg { display: flex; overflow: hidden; border: 1px solid var(--color-divider); border-radius: 12px; }
+.seg-opt { flex: 1; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; font-size: 13px; cursor: pointer; min-height: 42px; position: relative; }
+.seg-opt input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt:has(input:checked) { background: var(--color-accent); color: #fff; }
+.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.tag { display: inline-flex; align-items: center; font-size: 11px; letter-spacing: 0.02em; padding: 3px 10px; border-radius: 999px; background: var(--color-neutral-100); color: var(--color-neutral-800); }
+.tag-outline { background: transparent; border: 1px solid var(--color-text); color: var(--color-text); }
+.chip { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--color-divider); background: transparent; cursor: pointer; font-size: 13px; }
+.chip[aria-pressed="true"] { background: var(--color-text); color: var(--color-on-ink); border-color: var(--color-text); }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--color-glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--color-neutral-200); }
+.top .wrap { display: flex; align-items: stretch; gap: 0 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; min-height: 60px; padding: 0; border: 0; background: none; cursor: pointer; font-family: var(--font-heading); font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+.brand-mark { width: 30px; height: 30px; border-radius: 9px; background: var(--color-accent); display: grid; place-items: center; color: #fff; font-size: 15px; }
+.nav { display: flex; margin-left: auto; }
+.nav button { min-height: 60px; padding: 0 14px; border: 0; border-bottom: 4px solid transparent; background: none; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.nav button:hover { background: var(--color-surface); }
+.nav button[aria-current="page"] { border-bottom-color: var(--color-accent); }
+.nav .count { font-size: 11px; color: var(--color-neutral-700); }
+@media (max-width: 480px) { .nav { margin-left: 0; width: 100%; } .nav button { flex: 1; justify-content: center; min-height: 48px; padding: 0 6px; } .brand { min-height: 52px; } }
+
+/* explore */
+.hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px 40px; align-items: end; padding-bottom: 24px; }
+.search { display: flex; align-items: center; gap: 10px; border: 1px solid var(--color-neutral-300); border-radius: 14px; background: var(--color-card); box-shadow: var(--shadow-sm); padding: 0 16px; min-height: 56px; }
+.search input { flex: 1; min-width: 0; border: 0; background: transparent; font-size: 16px; min-height: 48px; }
+.rail { display: flex; gap: 20px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 8px; margin: 0 -2px; }
+.rail::-webkit-scrollbar { display: none; }
+.rail-item { flex: none; width: 104px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.rail-disc { width: 104px; height: 104px; border-radius: 50%; overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow .2s; position: relative; }
+.rail-disc.on { box-shadow: 0 0 0 3px var(--color-accent); }
+.rail-btn { min-height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; cursor: pointer; font-weight: 600; font-size: 13px; white-space: nowrap; }
+.rail-btn:hover { background: var(--color-accent-100); }
+.rail-btn[aria-pressed="true"] { background: var(--color-accent); color: #fff; }
+.filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px 24px; padding: 16px; margin-top: 8px; border-radius: 16px; }
+.filters > div { display: flex; flex-direction: column; gap: 6px; }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--color-divider); background: transparent; cursor: pointer; font-size: 14px; text-align: left; }
+.switch[aria-checked="true"] { background: var(--color-text); color: var(--color-on-ink); }
+.switch .track { width: 34px; height: 18px; border: 2px solid currentColor; border-radius: 999px; display: flex; padding: 2px; }
+.switch[aria-checked="true"] .track { justify-content: flex-end; }
+.switch .knob { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+.resultbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 0 24px; min-height: 44px; font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 36px 24px; }
+
+/* cards */
+.card { position: relative; border-radius: 20px; overflow: hidden; background: var(--color-card); box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.card-media { aspect-ratio: 16/10; width: 100%; max-width: 100%; position: relative; background: var(--color-surface); }
+.scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 56%; background: linear-gradient(to top, var(--scrim), rgba(20,18,17,0)); pointer-events: none; }
+.media-cap { position: absolute; left: 14px; bottom: 12px; color: #fff; font-weight: 800; font-size: 15px; letter-spacing: -0.01em; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,.3); }
+.card-body { display: flex; flex-direction: column; gap: 10px; width: 100%; padding: 14px 16px 14px; border: 0; background: none; text-align: left; cursor: pointer; }
+.card-row { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.card-name { font-family: var(--font-heading); font-weight: 800; font-size: 20px; line-height: 1.15; letter-spacing: -0.015em; text-wrap: pretty; }
+.card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; font-size: 13px; color: var(--color-neutral-700); border-top: 1px dashed var(--color-neutral-300); padding-top: 10px; }
+.dim { opacity: 0.35; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 8px; font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; }
+.save-fab { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%; box-shadow: var(--shadow-md); background: var(--color-card); cursor: pointer; z-index: 2; }
+.save-fab:hover, .save-pill:hover { background: var(--color-accent-100); }
+.save-fab[aria-pressed="true"], .save-pill[aria-pressed="true"] { color: var(--color-accent); }
+.skel { background: var(--color-surface); border-radius: 6px; }
+@keyframes pulse { 50% { opacity: .55; } }
+.skel-card { animation: pulse 1.4s ease-in-out infinite; }
+.empty { padding: 40px 24px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; max-width: 520px; }
+
+/* photo slot */
+.photo { position: absolute; inset: 0; overflow: hidden; }
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.plate { width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 0 16px 18%; position: relative; overflow: hidden; }
+.plate::before { content: ""; position: absolute; width: 78%; aspect-ratio: 1; right: -14%; top: -22%; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.34) 0 38%, rgba(255,255,255,.14) 39% 58%, transparent 59%); }
+.plate-word { position: relative; color: rgba(255,255,255,.9); font-family: var(--font-heading); font-weight: 800; font-size: clamp(18px, 3.4vw, 30px); line-height: .95; letter-spacing: -0.03em; max-width: 70%; text-wrap: balance; }
+.photo.round .plate { justify-content: center; align-items: center; padding: 8px; }
+.photo.round .plate::before { width: 92%; right: 4%; top: 4%; }
+.photo.round .plate-word { font-size: 13px; text-align: center; max-width: 100%; }
+.photo.tiny .plate-word { display: none; }
+.photo.tiny .plate::before { width: 120%; right: -10%; top: -10%; }
+.slot-edit { position: absolute; z-index: 3; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 10px; border-radius: 999px; border: 0; background: rgba(20,18,17,.72); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+.slot-edit:hover { background: rgba(20,18,17,.9); }
+.photo.round .slot-edit { left: 50%; top: auto; bottom: 6px; transform: translateX(-50%); width: 28px; min-height: 28px; padding: 0; justify-content: center; }
+.photo.tiny .slot-edit { inset: 0; transform: none; border-radius: 0; background: rgba(20,18,17,.0); color: transparent; min-height: 0; padding: 0; justify-content: center; }
+.photo.tiny .slot-edit:hover, .photo.tiny .slot-edit:focus-visible { background: rgba(20,18,17,.6); color: #fff; }
+.slot-edit input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+
+/* detail */
+.back { color: var(--color-text); padding-inline: 0; gap: 8px; }
+.dhero { margin-top: 12px; background: var(--color-surface); position: relative; overflow: hidden; border-radius: 24px; min-height: clamp(240px, 34vw, 400px); display: flex; align-items: flex-end; padding: 24px; }
+.dhero .scrim { height: 100%; background: linear-gradient(to top, rgba(20,18,17,.82) 0%, rgba(20,18,17,.25) 55%, rgba(20,18,17,0) 100%); }
+.dhero-text { position: relative; display: flex; flex-direction: column; gap: 12px; max-width: 760px; color: #fff; pointer-events: none; z-index: 1; }
+.dhero-text h1 { color: #fff; font-size: clamp(34px, 6.5vw, 72px); line-height: 0.95; letter-spacing: -0.035em; }
+.dhero .plate-word { display: none; }
+.save-pill { position: absolute; top: 16px; right: 16px; z-index: 3; min-height: 44px; padding: 0 16px; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; box-shadow: var(--shadow-md); background: var(--color-card); cursor: pointer; font-weight: 600; font-size: 13px; }
+.facts { margin: 16px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 0 24px; padding: 4px 20px; }
+.facts > div { padding: 14px 0; border-bottom: 1px solid var(--color-divider); }
+.facts dd { margin: 4px 0 0; font-size: 14px; }
+.cols { display: flex; flex-wrap: wrap; gap: 40px; margin-top: 32px; align-items: flex-start; }
+.aside { flex: 1 1 300px; display: flex; flex-direction: column; gap: 36px; min-width: 0; }
+.aside section { display: flex; flex-direction: column; gap: 16px; padding: 20px; }
+.bignum { font-family: var(--font-heading); font-weight: 800; font-size: 96px; line-height: 0.8; letter-spacing: -0.06em; font-variant-numeric: tabular-nums; }
+.verdict { display: inline-flex; align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-weight: 800; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.dist { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--color-neutral-200); padding-top: 14px; }
+.dist-row { display: grid; grid-template-columns: 30px minmax(0,1fr) 28px; align-items: center; gap: 10px; font-size: 13px; }
+.bar { height: 10px; border-radius: 999px; overflow: hidden; background: var(--color-neutral-200); }
+.bar > div { height: 100%; border-radius: 999px; transition: width .6s cubic-bezier(.2,.7,.2,1); }
+.dishes { list-style: none; margin: 0; padding: 0; }
+.dishes li { display: grid; grid-template-columns: 56px 22px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--color-divider); font-size: 15px; }
+.dish-thumb { width: 56px; height: 56px; border-radius: 12px; overflow: hidden; position: relative; }
+.rev-col { flex: 2 1 460px; min-width: 0; scroll-margin-top: 80px; }
+.rev-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px; border-bottom: 2px solid var(--color-text); padding-bottom: 12px; }
+.review { padding: 20px; margin-top: 14px; border-radius: 20px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 10px; background: var(--color-card); transition: background 1.4s ease; }
+.review.flash { background: var(--color-accent-100); }
+.avatar { width: 42px; height: 42px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--color-text); color: var(--color-on-ink); font-weight: 800; font-size: 14px; }
+.avatar.me { background: var(--color-accent); color: #fff; }
+.rmeta { font-size: 12px; color: var(--color-neutral-700); display: flex; flex-wrap: wrap; gap: 2px 8px; }
+.linkish { padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
+.rtext { font-size: 15px; line-height: 1.6; text-wrap: pretty; white-space: pre-line; overflow-wrap: anywhere; }
+.rphoto { width: 96px; height: 96px; border-radius: 12px; object-fit: cover; display: block; }
+.helpful { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--color-neutral-300); background: transparent; cursor: pointer; font-weight: 600; font-size: 13px; }
+.helpful:hover:not(:disabled) { border-color: var(--color-text); }
+.helpful[aria-pressed="true"] { background: var(--color-text); color: var(--color-on-ink); }
+.helpful:disabled { opacity: .55; cursor: not-allowed; }
+.report { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 8px; border: 0; background: none; color: var(--color-neutral-700); cursor: pointer; font-size: 13px; }
+.report:hover:not(:disabled) { color: var(--color-text); }
+.flagged { font-size: 12px; color: var(--color-accent-700); font-weight: 600; }
+.stickybar { position: sticky; bottom: 0; z-index: 10; margin: 40px calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: var(--color-glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 -4px 20px rgba(32,30,29,.08); }
+.stickybar > div { max-width: 1168px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.stickybar .name { font-size: 14px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cta { min-height: 48px; flex: 0 0 auto; min-width: min(240px, 50vw); justify-content: space-between; gap: 16px; font-size: 15px; }
+
+/* mine */
+.mine { padding: 20px; margin-top: 14px; display: grid; grid-template-columns: auto minmax(0,1fr); gap: 6px 16px; }
+.mine .badge { grid-row: span 3; align-self: start; }
+.mine-name { padding: 0; border: 0; background: none; cursor: pointer; font-family: var(--font-heading); font-weight: 800; font-size: 20px; text-align: left; }
+.mine-name:hover { color: var(--color-accent-700); }
+
+/* dialogs */
+.backdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: start center; overflow-y: auto; padding: clamp(0px, 4vw, 40px) clamp(0px, 3vw, 16px); padding-top: max(clamp(0px, 4vw, 40px), env(safe-area-inset-top, 0px)); background: color-mix(in srgb, #2d2b2b 55%, transparent); }
+.backdrop.center { place-items: center; padding: 16px; z-index: 60; }
+.dialog { width: min(660px, 100%); display: flex; flex-direction: column; gap: 22px; padding: 24px clamp(16px, 4vw, 32px); background: var(--color-card); border-radius: 24px; box-shadow: var(--shadow-lg); }
+.dialog.small { width: min(440px, 100%); gap: 12px; border-radius: 20px; padding: 20px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.rule2 { border-top: 2px solid var(--color-text); padding-top: 16px; }
+.starbtn { width: 48px; height: 48px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.starbtn svg { transition: transform .18s cubic-bezier(.3,1.6,.5,1), fill .15s; }
+.subrows { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 0 24px; border-top: 1px solid var(--color-divider); }
+.subrow { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-divider); min-height: 48px; font-size: 14px; }
+.substar { width: 36px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.fphoto { position: relative; width: 88px; height: 88px; }
+.fphoto img { width: 88px; height: 88px; border-radius: 12px; object-fit: cover; display: block; }
+.fphoto button { position: absolute; top: 4px; right: 4px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: var(--color-text); color: var(--color-on-ink); display: grid; place-items: center; cursor: pointer; }
+.addphoto { position: relative; width: 88px; height: 88px; border-radius: 12px; border: 1.5px dashed var(--color-neutral-400); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-size: 11px; color: var(--color-neutral-700); }
+.addphoto:hover, .addphoto:focus-within { border-color: var(--color-text); color: var(--color-text); }
+.addphoto input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.toast { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(88px + env(safe-area-inset-bottom, 0px)); z-index: 70; max-width: calc(100vw - 32px); padding: 14px 18px; background: var(--color-text); color: var(--color-on-ink); box-shadow: var(--shadow-lg); font-size: 14px; font-weight: 600; border-radius: 14px; }
+.notice { display: flex; gap: 10px; align-items: center; padding: 12px 16px; border-radius: 14px; background: var(--color-accent-100); color: var(--color-accent-800); font-size: 13px; margin-bottom: 16px; }
+.live { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-neutral-700); }
+.live .dot { background: var(--tone-good); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } .card:hover { transform: none; } }
+</style>
+
+<div id="app">
+  <div class="wrap" style="padding-block:40px">
+    <h1 class="display">Plate Index</h1>
+    <p class="muted" style="margin-top:12px">Loading restaurants and reviews…</p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+(() => {
+'use strict';
+const html = htm.bind(React.createElement);
+
+/* ── Restaurant catalogue (fixed content; reviews live in the shared store) ── */
+const R = [
+  {id:'r1',name:'Saffron Courtyard',cuisines:['North Indian'],priceRange:2,area:'Indiranagar',address:'14, 12th Main, HAL 2nd Stage, Indiranagar',hours:[12,23.5],isVeg:false,popularDishes:['Dal Makhani','Paneer Tikka','Butter Naan','Rogan Josh'],addedAt:'2024-02-11'},
+  {id:'r2',name:'Banana Leaf Tiffin Co.',cuisines:['South Indian'],priceRange:1,area:'Basavanagudi',address:'88, DVG Road, Basavanagudi',hours:[6.5,22],isVeg:true,popularDishes:['Masala Dosa','Ghee Podi Idli','Filter Coffee','Rava Vada'],addedAt:'2023-08-02'},
+  {id:'r3',name:'Red Lantern Wok',cuisines:['Chinese'],priceRange:2,area:'Koramangala',address:'5th Block, 80 Feet Road, Koramangala',hours:[12,23],isVeg:false,popularDishes:['Hakka Noodles','Chilli Garlic Prawns','Dim Sum Basket','Kung Pao Tofu'],addedAt:'2025-01-20'},
+  {id:'r4',name:'Trattoria Lucca',cuisines:['Italian'],priceRange:3,area:'Lavelle Road',address:'3, Lavelle Road, Ashok Nagar',hours:[12.5,23.5],isVeg:false,popularDishes:['Cacio e Pepe','Wood-fired Margherita','Burrata','Tiramisu'],addedAt:'2025-06-14'},
+  {id:'r5',name:'Morning Ledger Café',cuisines:['Cafe'],priceRange:2,area:'HSR Layout',address:'27th Main, Sector 1, HSR Layout',hours:[7.5,21],isVeg:false,popularDishes:['Shakshuka','Almond Croissant','Cold Brew','Avocado Toast'],addedAt:'2025-09-03'},
+  {id:'r6',name:"Nawab's Dum House",cuisines:['Biryani','North Indian'],priceRange:2,area:'Frazer Town',address:'Mosque Road, Frazer Town',hours:[12,25],isVeg:false,popularDishes:['Mutton Dum Biryani','Chicken 65','Mirchi ka Salan','Double ka Meetha'],addedAt:'2024-11-09'},
+  {id:'r7',name:'Chowpatty Corner',cuisines:['Street Food'],priceRange:1,area:'Jayanagar',address:'11th Main, 4th Block, Jayanagar',hours:[16,23],isVeg:true,popularDishes:['Pani Puri','Pav Bhaji','Dahi Puri','Vada Pav'],addedAt:'2022-05-18'},
+  {id:'r8',name:'Kulfi & Co.',cuisines:['Desserts'],priceRange:1,area:'Malleshwaram',address:'8th Cross, Sampige Road, Malleshwaram',hours:[11,23.5],isVeg:true,popularDishes:['Malai Kulfi','Rose Falooda','Rabri Jalebi','Pista Kulfi'],addedAt:'2024-04-27'},
+  {id:'r9',name:'Tandoor Line',cuisines:['North Indian','Biryani'],priceRange:3,area:'MG Road',address:'Level 2, 40 MG Road',hours:[19,24],isVeg:false,popularDishes:['Galouti Kebab','Murgh Malai Tikka','Lucknowi Biryani','Sheermal'],addedAt:'2026-02-15'},
+  {id:'r10',name:'Sundal Street',cuisines:['South Indian','Street Food'],priceRange:1,area:'Malleshwaram',address:'15th Cross, Margosa Road, Malleshwaram',hours:[15,22],isVeg:true,popularDishes:['Kuzhi Paniyaram','Mysore Bonda','Neer Dosa','Sundal Cup'],addedAt:'2026-07-01'}
+];
+const DISH_PRICE = {'Dal Makhani':340,'Paneer Tikka':380,'Butter Naan':70,'Rogan Josh':520,'Masala Dosa':90,'Ghee Podi Idli':80,'Filter Coffee':35,'Rava Vada':60,'Hakka Noodles':260,'Chilli Garlic Prawns':480,'Dim Sum Basket':320,'Kung Pao Tofu':290,'Cacio e Pepe':690,'Wood-fired Margherita':640,'Burrata':780,'Tiramisu':420,'Shakshuka':360,'Almond Croissant':220,'Cold Brew':240,'Avocado Toast':390,'Mutton Dum Biryani':420,'Chicken 65':280,'Mirchi ka Salan':120,'Double ka Meetha':140,'Pani Puri':60,'Pav Bhaji':140,'Dahi Puri':80,'Vada Pav':40,'Malai Kulfi':90,'Rose Falooda':160,'Rabri Jalebi':130,'Pista Kulfi':110,'Galouti Kebab':650,'Murgh Malai Tikka':590,'Lucknowi Biryani':720,'Sheermal':120,'Kuzhi Paniyaram':70,'Mysore Bonda':50,'Neer Dosa':80,'Sundal Cup':40};
+/* Placeholder plate colours per cuisine (hue in OKLCH) until an editor drops in a photo. */
+const HUE = {'North Indian':48,'South Indian':95,'Chinese':25,'Italian':140,'Cafe':60,'Biryani':70,'Street Food':35,'Desserts':350};
+const SIGNATURE = {r1:'Dal Makhani',r2:'Masala Dosa',r3:'Hakka Noodles',r4:'Margherita',r5:'Cold Brew',r6:'Dum Biryani',r7:'Pani Puri',r8:'Pista Kulfi',r9:'Galouti Kebab',r10:'Paniyaram'};
+
+const WORDS = ['', 'Poor', 'Below average', 'Average', 'Good', 'Excellent'];
+const SUBS = [['food','Food'],['service','Service'],['ambience','Ambience'],['value','Value']];
+const PRICE_NOTE = ['', 'under ₹500', '₹500–1,500', '₹1,500+'];
+const VISITS = ['Dine-in','Delivery','Takeaway'];
+const GOOD = {bg:'var(--tone-good)', fg:'var(--tone-good-fg)'}, MID = {bg:'var(--tone-mid)', fg:'var(--tone-mid-fg)'}, LOW = {bg:'var(--tone-low)', fg:'var(--tone-low-fg)'};
+const restById = id => R.find(r => r.id === id);
+const cuisineOpts = ['All'].concat([...new Set(R.flatMap(r => r.cuisines))].sort());
+
+function rel(ts){ const s=(Date.now()-ts)/1000; if(s<45) return 'just now'; const m=s/60; if(m<60) return Math.round(m)+' min ago'; const h=m/60; if(h<24) return Math.round(h)+' hr ago'; const d=h/24; if(d<2) return 'yesterday'; if(d<7) return Math.round(d)+' days ago'; if(d<30){const w=Math.round(d/7);return w+' week'+(w>1?'s':'')+' ago';} if(d<365){const mo=Math.max(1,Math.round(d/30));return mo+' month'+(mo>1?'s':'')+' ago';} const y=Math.round(d/365); return y+' year'+(y>1?'s':'')+' ago'; }
+function full(ts){ return new Date(ts).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}); }
+function hm(x){ x = x % 24; return String(Math.floor(x)).padStart(2,'0') + ':' + (x % 1 ? '30' : '00'); }
+function openInfo(h){ const n=new Date(); let t=n.getHours()+n.getMinutes()/60; const o=h[0], c=h[1]; if (c>24 && t+24<c) t+=24; const open=t>=o&&t<c; return {open, label: open ? 'Open · till '+hm(c) : 'Closed · opens '+hm(o), hours: hm(o)+' – '+hm(c)}; }
+function initials(n){ return String(n||'').trim().split(/\s+/).slice(0,2).map(p=>p[0]||'').join('').toUpperCase() || '?'; }
+const tone = (avg, n) => !n ? {bg:'var(--color-neutral-200)', fg:'var(--color-text)'} : avg >= 4 ? GOOD : avg >= 3 ? MID : LOW;
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+const safeImg = s => typeof s === 'string' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s) ? s : null;
+const safeAsset = id => typeof id === 'string' && /^[0-9a-f]{32}$/.test(id) ? '/_blob/' + id : null;
+const str = (v, n) => typeof v === 'string' ? v.slice(0, n) : '';
+
+/* Clean one review document from the shared store; anything malformed is dropped. */
+function normReview(id, d){
+  if (!d || !restById(d.restaurantId)) return null;
+  const rating = Math.round(Number(d.rating));
+  if (!(rating >= 1 && rating <= 5)) return null;
+  const sub = d.subRatings && typeof d.subRatings === 'object' ? d.subRatings : null;
+  const subClean = sub ? Object.fromEntries(SUBS.map(([k]) => [k, Math.max(0, Math.min(5, Math.round(Number(sub[k]) || 0)))])) : null;
+  return {id, restaurantId:d.restaurantId, authorId: typeof d.authorId === 'string' ? d.authorId : null, authorName: str(d.authorName,60) || 'Anonymous',
+    rating, title: str(d.title,100), text: str(d.text,1000), visitType: VISITS.includes(d.visitType) ? d.visitType : 'Dine-in',
+    dishes: Array.isArray(d.dishes) ? d.dishes.filter(x => typeof x === 'string').slice(0,8) : [],
+    subRatings: subClean && SUBS.some(([k]) => subClean[k]) ? subClean : null,
+    photos: Array.isArray(d.photos) ? d.photos.map(safeImg).filter(Boolean).slice(0,3) : [],
+    baseHelpful: Math.max(0, Math.floor(Number(d.baseHelpful) || 0)), createdAt: Number(d.createdAt) || 0, updatedAt: Number(d.updatedAt) || 0};
+}
+
+/* ── Platform capabilities ── */
+const use = name => (window.claude && typeof window.claude.use === 'function') ? Promise.resolve(window.claude.use(name)).catch(() => null) : Promise.resolve(null);
+const LS = {get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e) { return null; } }, set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }};
+/* One write at a time per document. */
+const queues = {};
+function serial(path, fn){ const p = (queues[path] || Promise.resolve()).catch(() => {}).then(fn); queues[path] = p; return p; }
+
+function resizeImage(file, max, q){
+  return new Promise((res, rej) => { const rd = new FileReader(); rd.onerror = rej;
+    rd.onload = () => { const img = new Image(); img.onerror = rej; img.onload = () => { const k = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas'); c.width = Math.round(img.width*k); c.height = Math.round(img.height*k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); c.toBlob(b => b ? res({blob:b, url:c.toDataURL('image/jpeg', q)}) : rej(new Error('encode')), 'image/jpeg', q); }; img.src = rd.result; };
+    rd.readAsDataURL(file); });
+}
+
+/* ── Icons (Lucide) ── */
+const Star = ({size=12, fill='currentColor', stroke, sw=2, style}) => html`<svg width=${size} height=${size} viewBox="0 0 24 24" fill=${fill} stroke=${stroke || 'currentColor'} strokeWidth=${sw} strokeLinejoin="miter" aria-hidden="true" style=${style}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+const Bookmark = ({size=20, on}) => html`<svg width=${size} height=${size} viewBox="0 0 24 24" fill=${on ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>`;
+const CameraIcon = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>`;
+
+/* A photo slot: the editor-uploaded photo when there is one, otherwise a coloured plate. */
+function Photo({slotId, url, hue, word, kind, canUpload, onUpload, busy, label}){
+  const cls = 'photo' + (kind ? ' ' + kind : '');
+  const bg = `radial-gradient(120% 90% at 85% 10%, oklch(0.80 0.13 ${hue+20}) 0%, transparent 60%), linear-gradient(140deg, oklch(0.62 0.15 ${hue}) 0%, oklch(0.42 0.12 ${hue-25}) 100%)`;
+  return html`<div className=${cls} style=${kind === 'round' ? {borderRadius:'50%'} : null}>
+    ${url ? html`<img src=${url} alt=${label || ''} loading="lazy" />` : html`<div className="plate" style=${{background:bg}} role="img" aria-label=${(label || word) + ' (no photo yet)'}><span className="plate-word" aria-hidden="true">${word}</span></div>`}
+    ${canUpload && html`<label className="slot-edit" onClick=${e => e.stopPropagation()} title=${url ? 'Replace photo' : 'Add a photo'}>
+      <${CameraIcon} />${busy ? (kind ? '…' : 'Uploading…') : kind ? '' : url ? 'Change' : 'Add photo'}
+      <input type="file" accept="image/jpeg,image/png,image/webp" aria-label=${(url ? 'Replace photo for ' : 'Add a photo for ') + (label || word)} disabled=${busy} onChange=${e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) onUpload(slotId, f); }} />
+    </label>`}
+  </div>`;
+}
+
+class App extends React.Component {
+  state = { view:'explore', prevView:'explore', restId:null, search:'', cuisine:'All', minRating:0, price:0, vegOnly:false, sort:'top', reviewSort:'newest',
+    form:null, toast:null, confirmDel:null, flash:null,
+    status:'loading', reviews:[], votes:{}, reports:{}, slots:{}, saved: LS.get('plateindex.saved') || [], myReports: [], uid:null, myName:'', canWrite:null, canModerate:false, assets:null, uploading:{} };
+  starRef = React.createRef();
+  reviewsRef = React.createRef();
+  unsubs = [];
+
+  componentDidMount(){
+    this._key = e => { if (e.key === 'Escape') { if (this.state.confirmDel) this.setState({confirmDel:null}); else if (this.state.form) this.setState({form:null}); } };
+    window.addEventListener('keydown', this._key);
+    this._hash = () => { const h = location.hash.slice(1); if (restById(h)) this.openRest(h, true); };
+    window.addEventListener('hashchange', this._hash); this._hash();
+    this._tick = setInterval(() => this.forceUpdate(), 60000);
+    this.connect();
+  }
+  componentWillUnmount(){ window.removeEventListener('keydown', this._key); window.removeEventListener('hashchange', this._hash); clearInterval(this._tick); clearTimeout(this._t); this.unsubs.forEach(u => u()); }
+  componentDidUpdate(_, prev){
+    if (!prev.form && this.state.form) requestAnimationFrame(() => { const b = this.starRef.current && this.starRef.current.querySelector('[tabindex="0"]'); b && b.focus(); });
+  }
+
+  async connect(){
+    const [db, user, assets] = await Promise.all([use('db'), use('user'), use('assets')]);
+    if (!db) { this.setState({status:'offline'}); return; }
+    this.db = db;
+    let uid = null, me = null, canWrite = null, canModerate = false;
+    if (user) { [uid, me, canWrite, canModerate] = await Promise.all([user.id(), user.me(), user.can('data.write'), user.canEdit()]); }
+    this.setState({uid, canWrite, canModerate: !!canModerate, assets: assets || null, myName: (me && me.name) || ''});
+    const onErr = e => { if (e && e.code === 'revoked') this.setState({status:'offline'}); };
+    this.unsubs.push(db.collection('reviews').limit(1000).onSnapshot(snap => {
+      const reviews = snap.docs.map(d => normReview(d.id, d.data())).filter(Boolean);
+      this.setState({reviews, status:'live'});
+    }, e => { onErr(e); this.setState(s => s.status === 'loading' ? {status:'offline'} : null); }));
+    this.unsubs.push(db.collection('votes').limit(1000).onSnapshot(snap => {
+      const votes = {}; snap.docs.forEach(d => { const ids = (d.data() || {}).ids; if (Array.isArray(ids)) votes[d.id] = ids.filter(x => typeof x === 'string'); });
+      this.setState({votes});
+    }, onErr));
+    this.unsubs.push(db.collection('slots').limit(500).onSnapshot(snap => {
+      const slots = {}; snap.docs.forEach(d => { const u = safeAsset((d.data() || {}).asset); if (u) slots[d.id] = u; });
+      this.setState({slots});
+    }, onErr));
+    if (canModerate) this.unsubs.push(db.collection('reports').limit(1000).onSnapshot(snap => {
+      const reports = {}; snap.docs.forEach(d => { const ids = (d.data() || {}).ids; if (Array.isArray(ids)) ids.forEach(x => { reports[x] = (reports[x] || 0) + 1; }); });
+      this.setState({reports});
+    }, onErr));
+    if (uid) {
+      this.unsubs.push(db.doc('reports/' + uid).onSnapshot(s => { const ids = s.exists ? (s.data().ids || []) : []; this.setState({myReports: Array.isArray(ids) ? ids : []}); }, onErr));
+      this.unsubs.push(db.doc('data/users/' + uid + '/prefs').onSnapshot(s => {
+        if (!s.exists) { const local = LS.get('plateindex.saved'); if (Array.isArray(local) && local.length) this.writePrefs({saved: local}); return; }
+        const d = s.data() || {}; this.setState(st => ({saved: Array.isArray(d.saved) ? d.saved.filter(restById) : [], myName: str(d.lastName,60) || st.myName}));
+      }, onErr));
+    }
+  }
+
+  toast(msg){ clearTimeout(this._t); this.setState({toast:msg}); this._t = setTimeout(() => this.setState({toast:null}), 3200); }
+  failMsg(e){ const c = e && e.code; return c === 'invalid_argument' ? 'You can read reviews here but not post. Ask the owner for Contributor access.' : c === 'quota_exceeded' ? 'The review store is full. Ask the owner to clear out old reviews.' : c === 'resource_exhausted' ? 'Too many changes at once. Wait a moment and try again.' : 'Couldn’t reach the review store. Check your connection and try again.'; }
+  go(view, extra){ this.setState(s => Object.assign({view, prevView: s.view === 'detail' ? s.prevView : s.view}, extra || {})); window.scrollTo(0,0); if (view !== 'detail' && location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch(e) {} } }
+  openRest(id, fromHash){ this.go('detail', {restId:id, reviewSort:'newest'}); if (!fromHash) { try { history.replaceState(null, '', '#' + id); } catch(e) {} } }
+
+  writePrefs(patch){
+    const uid = this.state.uid;
+    if (!this.db || !uid) return Promise.resolve();
+    const path = 'data/users/' + uid + '/prefs';
+    return serial(path, () => { const body = {saved: this.state.saved, lastName: this.state.myName || ''}; Object.assign(body, patch); return this.db.doc(path).set(body); }).catch(() => {});
+  }
+  toggleSave(id){
+    const has = this.state.saved.includes(id);
+    const saved = has ? this.state.saved.filter(x => x !== id) : [id].concat(this.state.saved);
+    this.setState({saved}); LS.set('plateindex.saved', saved); this.writePrefs({saved});
+    this.toast(has ? 'Removed from Saved' : 'Saved to your shortlist');
+  }
+
+  patchForm(p){ this.setState(s => ({form: Object.assign({}, s.form, p)})); }
+  canPost(){ return !!(this.db && this.state.status === 'live' && this.state.canWrite !== false); }
+  openForm(restId, review){
+    if (!review && !this.canPost()) { this.toast(this.state.status === 'offline' ? 'Sign in to claude.ai to post a review.' : 'You can read reviews here but not post. Ask the owner for Contributor access.'); return; }
+    const f = review
+      ? {editId:review.id, restId, rating:review.rating, hover:0, name:review.authorName, title:review.title||'', text:review.text, visitType:review.visitType, dishes:(review.dishes||[]).slice(), sub:Object.assign({food:0,service:0,ambience:0,value:0}, review.subRatings||{}), photos:(review.photos||[]).slice(), saving:false, tried:false, blurText:false, blurName:false, createdAt:review.createdAt, baseHelpful:review.baseHelpful}
+      : {editId:null, restId, rating:0, hover:0, name:this.state.myName||'', title:'', text:'', visitType:'Dine-in', dishes:[], sub:{food:0,service:0,ambience:0,value:0}, photos:[], saving:false, tried:false, blurText:false, blurName:false};
+    this.setState({form:f});
+  }
+  addPhotos(e){
+    const files = Array.from(e.target.files || []); e.target.value = '';
+    const room = 3 - this.state.form.photos.length; if (room <= 0) return;
+    if (files.length > room) this.toast('Only 3 photos per review. Extra files were skipped.');
+    files.filter(f => /^image\//.test(f.type)).slice(0, room).forEach(file => {
+      resizeImage(file, 420, 0.62).then(({url}) => this.setState(s => s.form && s.form.photos.length < 3 ? {form: Object.assign({}, s.form, {photos: s.form.photos.concat(url)})} : null))
+        .catch(() => this.toast('That photo couldn’t be read. Try a JPEG or PNG.'));
+    });
+  }
+  canSubmit(f){ const n = f.text.trim().length; return !!(f.rating && n >= 10 && n <= 1000 && f.name.trim()); }
+  async submit(e){
+    e && e.preventDefault();
+    const f = this.state.form; if (!f || f.saving) return;
+    if (!this.canSubmit(f)) { this.patchForm({tried:true}); return; }
+    this.patchForm({saving:true});
+    const now = Date.now();
+    const anySub = SUBS.some(([k]) => f.sub[k]);
+    const id = f.editId || ('u-' + now.toString(36) + Math.random().toString(36).slice(2,6));
+    const body = {restaurantId:f.restId, authorId:this.state.uid, authorName:f.name.trim().slice(0,60), rating:f.rating, title:f.title.trim().slice(0,100), text:f.text.trim().slice(0,1000),
+      visitType:f.visitType, dishes:f.dishes, subRatings: anySub ? f.sub : null, photos:f.photos, baseHelpful: f.editId ? (f.baseHelpful || 0) : 0, createdAt: f.editId ? f.createdAt : now};
+    if (f.editId) body.updatedAt = now;
+    try {
+      await serial('reviews/' + id, () => this.db.doc('reviews/' + id).set(body));
+    } catch (err) { this.patchForm({saving:false}); this.toast(this.failMsg(err)); if (err && err.code === 'invalid_argument') this.setState({canWrite:false}); return; }
+    this.setState(s => ({form:null, flash:id, myName: body.authorName, reviewSort: f.editId ? s.reviewSort : 'newest'}));
+    this.writePrefs({lastName: body.authorName});
+    this.toast(f.editId ? 'Review updated' : 'Review posted. Everyone with the link can see it now.');
+    setTimeout(() => this.setState({flash:null}), 1600);
+    if (this.state.view === 'detail') requestAnimationFrame(() => { const el = this.reviewsRef.current; if (el) window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 76, behavior:'smooth'}); });
+  }
+  toggleHelpful(id){
+    const uid = this.state.uid; if (!uid || !this.db) { this.toast('Sign in to claude.ai to vote.'); return; }
+    const mine = this.state.votes[uid] || [];
+    const ids = mine.includes(id) ? mine.filter(x => x !== id) : mine.concat(id);
+    this.setState(s => ({votes: Object.assign({}, s.votes, {[uid]: ids})}));
+    serial('votes/' + uid, () => this.db.doc('votes/' + uid).set({ids})).catch(err => this.toast(this.failMsg(err)));
+  }
+  report(id){
+    const uid = this.state.uid; if (!uid || !this.db) { this.toast('Sign in to claude.ai to report a review.'); return; }
+    if (this.state.myReports.includes(id)) return;
+    const ids = this.state.myReports.concat(id); this.setState({myReports: ids});
+    serial('reports/' + uid, () => this.db.doc('reports/' + uid).set({ids})).then(() => this.toast('Reported. The page owner will take a look.')).catch(err => this.toast(this.failMsg(err)));
+  }
+  async doDelete(){
+    const id = this.state.confirmDel; this.setState({confirmDel:null});
+    try { await serial('reviews/' + id, () => this.db.doc('reviews/' + id).delete()); this.toast('Review deleted'); }
+    catch (err) { this.toast(this.failMsg(err)); }
+  }
+  async uploadSlot(slotId, file){
+    const assets = this.state.assets; if (!assets || !this.db) return;
+    this.setState(s => ({uploading: Object.assign({}, s.uploading, {[slotId]: true})}));
+    try {
+      const {blob} = await resizeImage(file, 1400, 0.82);
+      const res = await assets.upload(blob, {type:'image/jpeg'});
+      await serial('slots/' + slotId, () => this.db.doc('slots/' + slotId).set({asset: res.id, updatedAt: Date.now()}));
+      this.toast('Photo saved for everyone');
+    } catch (err) { this.toast(err && err.code === 'not_granted' ? 'Only editors can change photos.' : 'The photo didn’t upload. Try a smaller JPEG or PNG.'); }
+    this.setState(s => { const u = Object.assign({}, s.uploading); delete u[slotId]; return {uploading:u}; });
+  }
+
+  /* ── view ── */
+  render(){
+    const s = this.state, uid = s.uid;
+    const loading = s.status === 'loading';
+    const all = s.reviews.map(r => { const voters = Object.keys(s.votes).filter(k => s.votes[k].includes(r.id)); return Object.assign({}, r, {voters, helpfulCount: r.baseHelpful + voters.length}); });
+    const stats = {}; R.forEach(r => { const l = all.filter(x => x.restaurantId === r.id); const n = l.length; const sum = l.reduce((a,x) => a + x.rating, 0); stats[r.id] = {list:l, n, avg: n ? Math.round(sum/n*10)/10 : 0, dist:[5,4,3,2,1].map(k => l.filter(x => x.rating === k).length)}; });
+    const slotProps = (slotId, hue, word, kind, label) => ({slotId, url: s.slots[slotId], hue, word, kind, label, canUpload: !!s.assets && s.status === 'live', onUpload: (id, f) => this.uploadSlot(id, f), busy: !!s.uploading[slotId]});
+    const restHue = r => HUE[r.cuisines[0]] || 40;
+    const mineList = uid ? all.filter(r => r.authorId === uid).sort((a,b) => b.createdAt - a.createdAt) : [];
+
+    return html`<div>
+      <header className="top"><div className="wrap">
+        <button className="brand" onClick=${() => this.go('explore')} aria-label="Plate Index home"><span className="brand-mark">P</span>Plate Index</button>
+        <nav className="nav" aria-label="Main">
+          <button onClick=${() => this.go('explore')} aria-current=${s.view === 'explore' ? 'page' : undefined}>Explore</button>
+          <button onClick=${() => this.go('saved')} aria-current=${s.view === 'saved' ? 'page' : undefined}>Saved <span className="count">${s.saved.length}</span></button>
+          <button onClick=${() => this.go('mine')} aria-current=${s.view === 'mine' ? 'page' : undefined}>My reviews <span className="count">${mineList.length}</span></button>
+        </nav>
+      </div></header>
+      ${(s.view === 'explore' || s.view === 'saved') && this.renderList(stats, slotProps, restHue, loading)}
+      ${s.view === 'detail' && restById(s.restId) && this.renderDetail(restById(s.restId), stats, slotProps, restHue, uid)}
+      ${s.view === 'mine' && this.renderMine(mineList)}
+      ${s.form && this.renderForm()}
+      ${s.confirmDel && this.renderConfirm(all)}
+      ${s.toast && html`<div className="toast" role="status">${s.toast}</div>`}
+    </div>`;
+  }
+
+  statusNotice(){
+    const s = this.state;
+    if (s.status === 'offline') return html`<div className="notice" role="note">Reviews are stored with this page on claude.ai. Open it signed in to read and post them.</div>`;
+    if (s.status === 'live' && s.canWrite === false) return html`<div className="notice" role="note">You can read every review. Posting needs Contributor access, which the page owner can grant from Share.</div>`;
+    return null;
+  }
+
+  renderList(stats, slotProps, restHue, loading){
+    const s = this.state;
+    const q = s.search.trim().toLowerCase();
+    const filtersActive = !!(q || s.cuisine !== 'All' || s.minRating || s.price || s.vegOnly);
+    const clear = () => this.setState({search:'', cuisine:'All', minRating:0, price:0, vegOnly:false});
+    let list;
+    if (s.view === 'saved') list = s.saved.map(restById).filter(Boolean);
+    else {
+      list = R.filter(r => (!q || r.name.toLowerCase().includes(q) || r.cuisines.some(c => c.toLowerCase().includes(q)) || r.area.toLowerCase().includes(q))
+        && (s.cuisine === 'All' || r.cuisines.includes(s.cuisine))
+        && (!s.minRating || (stats[r.id].n && stats[r.id].avg >= s.minRating))
+        && (!s.price || r.priceRange === s.price) && (!s.vegOnly || r.isVeg));
+      const by = {top:(a,b) => stats[b.id].avg - stats[a.id].avg || stats[b.id].n - stats[a.id].n, reviewed:(a,b) => stats[b.id].n - stats[a.id].n || stats[b.id].avg - stats[a.id].avg, price:(a,b) => a.priceRange - b.priceRange || stats[b.id].avg - stats[a.id].avg, newest:(a,b) => b.addedAt.localeCompare(a.addedAt)};
+      list = list.slice().sort(by[s.sort]);
+    }
+    const isSaved = s.view === 'saved';
+    const totalReviews = this.state.reviews.length;
+    return html`<main className="wrap" style=${{paddingBlock:'28px 72px'}}>
+      ${this.statusNotice()}
+      ${!isSaved ? html`<div>
+        <div className="hero">
+          <div>
+            <h6 className="kicker" style=${{marginBottom:10}}>Bengaluru · ${R.length} kitchens indexed${s.status === 'live' ? ` · ${totalReviews} verdicts` : ''}</h6>
+            <h1 className="display">Find a table. Leave a verdict.</h1>
+          </div>
+          <label className="search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <span className="sr">Search restaurants</span>
+            <input id="pi-search" type="search" value=${s.search} onChange=${e => this.setState({search:e.target.value})} placeholder="Search by name, cuisine or area" />
+          </label>
+        </div>
+        <div style=${{display:'flex',flexDirection:'column',gap:12,padding:'8px 0 20px'}}>
+          <h4>What's on your mind?</h4>
+          <div className="rail">
+            ${cuisineOpts.slice(1).map(c => { const on = s.cuisine === c; return html`<div className="rail-item" key=${c}>
+              <div className=${'rail-disc' + (on ? ' on' : '')}><${Photo} ...${slotProps('cuisine-' + slug(c), HUE[c] || 40, c, 'round', c + ' dishes')} /></div>
+              <button className="rail-btn" aria-pressed=${on} onClick=${() => this.setState({cuisine: on ? 'All' : c})}>${c}</button>
+            </div>`; })}
+          </div>
+        </div>
+        <div className="filters panel">
+          <div><label htmlFor="pi-cuisine" className="label">Cuisine</label>
+            <select id="pi-cuisine" className="input" value=${s.cuisine} onChange=${e => this.setState({cuisine:e.target.value})}>${cuisineOpts.map(o => html`<option key=${o} value=${o}>${o}</option>`)}</select></div>
+          <div><span className="label" id="pi-minr-l">Min rating</span>
+            <div className="seg" role="radiogroup" aria-labelledby="pi-minr-l">${[[0,'Any'],[3,'3+'],[4,'4+'],[4.5,'4.5+']].map(([v,l]) => html`<label className="seg-opt" key=${l}><input type="radio" name="pi-minr" checked=${s.minRating === v} onChange=${() => this.setState({minRating:v})} />${l}</label>`)}</div></div>
+          <div><span className="label" id="pi-price-l">Price</span>
+            <div className="seg" role="radiogroup" aria-labelledby="pi-price-l">${[[0,'Any'],[1,'₹'],[2,'₹₹'],[3,'₹₹₹']].map(([v,l]) => html`<label className="seg-opt" key=${l}><input type="radio" name="pi-price" checked=${s.price === v} onChange=${() => this.setState({price:v})} />${l}</label>`)}</div></div>
+          <div><span className="label">Diet</span>
+            <button className="switch" role="switch" aria-checked=${s.vegOnly} onClick=${() => this.setState({vegOnly:!s.vegOnly})}>Veg only<span className="track"><span className="knob"></span></span></button></div>
+          <div><label htmlFor="pi-sort" className="label">Sort by</label>
+            <select id="pi-sort" className="input" value=${s.sort} onChange=${e => this.setState({sort:e.target.value})}>
+              <option value="top">Top rated</option><option value="reviewed">Most reviewed</option><option value="price">Price: low to high</option><option value="newest">Newest</option>
+            </select></div>
+        </div>
+      </div>` : html`<div style=${{paddingBottom:20,borderBottom:'2px solid var(--color-text)'}}>
+        <h6 className="kicker" style=${{marginBottom:10}}>Your shortlist</h6>
+        <h1 className="display">Saved</h1>
+      </div>`}
+
+      <div className="resultbar">
+        <span><strong>${list.length}</strong> ${isSaved ? (list.length === 1 ? 'saved restaurant' : 'saved restaurants') : (list.length === 1 ? 'restaurant' : 'restaurants')}</span>
+        <span style=${{display:'flex',gap:12,alignItems:'center'}}>
+          ${s.status === 'live' && html`<span className="live"><span className="dot"></span>Live reviews</span>`}
+          ${!isSaved && filtersActive && html`<button className="btn btn-ghost" onClick=${clear}>Clear filters</button>`}
+        </span>
+      </div>
+
+      ${list.length > 0 ? html`<div className="grid">${list.map(r => this.renderCard(r, stats[r.id], slotProps, restHue, loading))}</div>`
+        : html`<div className="empty panel">
+          <h3>${isSaved ? 'Nothing saved yet.' : 'No restaurants match.'}</h3>
+          <p className="muted">${isSaved ? 'Tap the bookmark on any restaurant to build a shortlist.' : 'Try a broader search, a lower minimum rating, or clear the filters.'}</p>
+          <button className="btn btn-secondary" onClick=${isSaved ? () => this.go('explore') : clear}>${isSaved ? 'Browse restaurants' : 'Clear filters'}</button>
+        </div>`}
+    </main>`;
+  }
+
+  renderCard(r, st, slotProps, restHue, loading){
+    const t = tone(st.avg, st.n), oi = openInfo(r.hours), saved = this.state.saved.includes(r.id);
+    return html`<article className="card" key=${r.id}>
+      <div className="card-media">
+        <${Photo} ...${slotProps('photo-' + r.id, restHue(r), SIGNATURE[r.id], '', r.name)} />
+        <div className="scrim"></div>
+        <span className="media-cap">${r.cuisines.join(' / ')} · ${PRICE_NOTE[r.priceRange]} for two</span>
+      </div>
+      <button className="card-body" onClick=${() => this.openRest(r.id)} aria-label=${r.name + ', rated ' + (st.n ? st.avg.toFixed(1) : 'none') + ', ' + st.n + ' reviews'}>
+        <div className="card-row">
+          <span className="card-name">${r.name}</span>
+          <span style=${{flex:'none',display:'flex',flexDirection:'column',alignItems:'flex-end',gap:3}}>
+            ${loading ? html`<span className="skel skel-card" style=${{width:52,height:26}}></span>`
+              : html`<span className="badge" style=${{background:t.bg,color:t.fg}}>${st.n ? st.avg.toFixed(1) : 'New'}<${Star} /></span>`}
+            <span style=${{fontSize:11}} className="muted">${loading ? ' ' : st.n + (st.n === 1 ? ' review' : ' reviews')}</span>
+          </span>
+        </div>
+        <div style=${{display:'flex',flexWrap:'wrap',gap:6}}>
+          ${r.cuisines.map(c => html`<span className="tag" key=${c}>${c}</span>`)}
+          ${r.isVeg && html`<span className="tag tag-outline">Pure veg</span>`}
+        </div>
+        <div className="card-meta">
+          <span><strong style=${{color:'var(--color-text)'}}>${'₹'.repeat(r.priceRange)}</strong><span className="dim">${'₹'.repeat(3 - r.priceRange)}</span></span>
+          <span>${r.area}</span>
+          <span style=${{display:'inline-flex',alignItems:'center',gap:6,color:'var(--color-text)'}}><span className="dot" style=${{background: oi.open ? 'var(--tone-good)' : 'var(--color-neutral-400)'}}></span>${oi.label}</span>
+        </div>
+      </button>
+      <button className="save-fab" onClick=${e => { e.stopPropagation(); this.toggleSave(r.id); }} aria-label=${saved ? 'Remove ' + r.name + ' from Saved' : 'Save ' + r.name} aria-pressed=${saved}><${Bookmark} on=${saved} /></button>
+    </article>`;
+  }
+
+  renderDetail(rest, stats, slotProps, restHue, uid){
+    const s = this.state, st = stats[rest.id], t = tone(st.avg, st.n), oi = openInfo(rest.hours), saved = s.saved.includes(rest.id), max = Math.max(1, ...st.dist);
+    const loading = s.status === 'loading';
+    const sorters = {newest:(a,b) => b.createdAt - a.createdAt, highest:(a,b) => b.rating - a.rating || b.createdAt - a.createdAt, lowest:(a,b) => a.rating - b.rating || b.createdAt - a.createdAt, helpful:(a,b) => b.helpfulCount - a.helpfulCount || b.createdAt - a.createdAt};
+    const toneFor = k => k >= 4 ? 'var(--tone-good)' : k === 3 ? 'var(--tone-mid)' : 'var(--tone-low)';
+    const reviews = st.list.slice().sort(sorters[s.reviewSort]);
+    const backLabel = s.prevView === 'saved' ? 'Saved' : s.prevView === 'mine' ? 'My reviews' : 'All restaurants';
+    const avgLabel = loading ? '…' : st.n ? st.avg.toFixed(1) : '—';
+    return html`<main className="wrap" style=${{paddingTop:16}}>
+      <button className="btn btn-ghost back" onClick=${() => this.go(s.prevView === 'detail' ? 'explore' : s.prevView)}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>${backLabel}
+      </button>
+      ${this.statusNotice()}
+      <div className="dhero">
+        <${Photo} ...${slotProps('photo-' + rest.id, restHue(rest), SIGNATURE[rest.id], '', rest.name)} />
+        <div className="scrim"></div>
+        <div className="dhero-text">
+          <span className="label" style=${{color:'#fff',fontSize:12}}>${rest.cuisines.join(' / ')} · ${rest.area}</span>
+          <h1>${rest.name}</h1>
+        </div>
+        <button className="save-pill" onClick=${() => this.toggleSave(rest.id)} aria-label=${saved ? 'Remove from Saved' : 'Save restaurant'} aria-pressed=${saved}><${Bookmark} size=${18} on=${saved} />${saved ? 'Saved' : 'Save'}</button>
+      </div>
+
+      <dl className="facts panel">
+        <div><dt className="label">Address</dt><dd>${rest.address}</dd></div>
+        <div><dt className="label">Hours</dt><dd style=${{display:'flex',flexDirection:'column'}}><span>${oi.hours}</span><span className="muted" style=${{display:'inline-flex',alignItems:'center',gap:6,fontSize:13}}><span className="dot" style=${{background: oi.open ? 'var(--tone-good)' : 'var(--color-neutral-400)'}}></span>${oi.label}</span></dd></div>
+        <div><dt className="label">Price for two</dt><dd><strong>${'₹'.repeat(rest.priceRange)}</strong><span className="dim">${'₹'.repeat(3 - rest.priceRange)}</span> · ${PRICE_NOTE[rest.priceRange]}</dd></div>
+        <div><dt className="label">Diet</dt><dd>${rest.isVeg ? 'Pure vegetarian' : 'Veg & non-veg'}</dd></div>
+      </dl>
+
+      <div className="cols">
+        <aside className="aside">
+          <section className="panel" aria-label="Rating breakdown">
+            <h6 className="muted">Rating</h6>
+            <div style=${{display:'flex',alignItems:'flex-end',gap:16}}>
+              <span className="bignum">${avgLabel}</span>
+              <div style=${{display:'flex',flexDirection:'column',gap:6,paddingBottom:2}}>
+                <span className="verdict" style=${{background:t.bg,color:t.fg}}>${st.n ? WORDS[Math.round(st.avg)] : 'Not rated'}</span>
+                <div style=${{display:'flex',gap:2,color:'var(--color-accent)'}} aria-hidden="true">${[1,2,3,4,5].map(i => html`<${Star} key=${i} size=${18} fill=${i <= Math.round(st.avg) ? 'currentColor' : 'none'} />`)}</div>
+                <span className="muted" style=${{fontSize:13}}>Based on ${st.n} ${st.n === 1 ? 'review' : 'reviews'}</span>
+              </div>
+            </div>
+            <div className="dist">
+              ${[5,4,3,2,1].map((k,i) => html`<div className="dist-row" key=${k} aria-label=${k + ' stars: ' + st.dist[i] + ' reviews'}>
+                <span style=${{fontWeight:600}}>${k}★</span>
+                <div className="bar"><div style=${{width:(st.dist[i]/max*100) + '%', background:toneFor(k)}}></div></div>
+                <span className="muted" style=${{textAlign:'right',fontVariantNumeric:'tabular-nums'}}>${st.dist[i]}</span>
+              </div>`)}
+            </div>
+          </section>
+          <section className="panel" aria-label="Popular dishes" style=${{gap:0}}>
+            <h6 className="muted" style=${{marginBottom:6}}>Popular dishes</h6>
+            <ol className="dishes">
+              ${rest.popularDishes.map((n,i) => { const c = st.list.filter(r => r.dishes.includes(n)).length; return html`<li key=${n}>
+                <div className="dish-thumb"><${Photo} ...${slotProps('dish-' + rest.id + '-' + i, restHue(rest) + i*18, n, 'tiny', n)} /></div>
+                <span style=${{fontSize:12,fontWeight:600,color:'var(--color-accent-700)'}}>${String(i+1).padStart(2,'0')}</span>
+                <span>${n}</span>
+                <span style=${{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:2}}><span style=${{fontWeight:800,fontVariantNumeric:'tabular-nums'}}>${DISH_PRICE[n] ? '₹' + DISH_PRICE[n] : ''}</span><span className="muted" style=${{fontSize:11}}>${c ? c + (c === 1 ? ' mention' : ' mentions') : ''}</span></span>
+              </li>`; })}
+            </ol>
+          </section>
+        </aside>
+
+        <section className="rev-col" aria-label="Reviews" ref=${this.reviewsRef}>
+          <div className="rev-head">
+            <h3>Reviews <span style=${{color:'var(--color-neutral-600)'}}>${st.n}</span></h3>
+            <div style=${{display:'flex',alignItems:'center',gap:8}}>
+              <label htmlFor="pi-rsort" className="label">Sort</label>
+              <select id="pi-rsort" className="input" style=${{width:'auto'}} value=${s.reviewSort} onChange=${e => this.setState({reviewSort:e.target.value})}>
+                <option value="newest">Newest first</option><option value="highest">Highest rated</option><option value="lowest">Lowest rated</option><option value="helpful">Most helpful</option>
+              </select>
+            </div>
+          </div>
+          ${loading && [1,2].map(k => html`<div key=${k} className="review skel-card"><div className="skel" style=${{height:42,width:'40%'}}></div><div className="skel" style=${{height:14,width:'90%'}}></div><div className="skel" style=${{height:14,width:'70%'}}></div></div>`)}
+          ${!loading && st.n === 0 && html`<div style=${{padding:'40px 0',display:'flex',flexDirection:'column',alignItems:'flex-start',gap:10}}>
+            <h4>No reviews yet.</h4>
+            <p className="muted">Be the first to review ${rest.name}.</p>
+            <button className="btn btn-primary" onClick=${() => this.openForm(rest.id, null)}>Write the first review</button>
+          </div>`}
+          ${reviews.map(r => this.renderReview(r, uid))}
+        </section>
+      </div>
+
+      <div className="stickybar"><div>
+        <span className="name"><strong>${rest.name}</strong> · ${avgLabel}★</span>
+        <button className="btn btn-primary cta" onClick=${() => this.openForm(rest.id, null)}>Write a review<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+      </div></div>
+    </main>`;
+  }
+
+  renderReview(r, uid){
+    const s = this.state;
+    const mine = !!uid && r.authorId === uid, voted = !!uid && r.voters.includes(uid), reported = s.myReports.includes(r.id), t = tone(r.rating, 1);
+    const canDelete = mine || s.canModerate;
+    const flags = s.canModerate ? (s.reports[r.id] || 0) : 0;
+    return html`<article className=${'review' + (s.flash === r.id ? ' flash' : '')} key=${r.id}>
+      <div style=${{display:'flex',gap:12,alignItems:'center'}}>
+        <span aria-hidden="true" className=${'avatar' + (mine ? ' me' : '')}>${initials(r.authorName)}</span>
+        <div style=${{flex:1,minWidth:0,display:'flex',flexDirection:'column'}}>
+          <span style=${{fontWeight:600,fontSize:15,overflowWrap:'anywhere'}}>${r.authorName}${mine ? ' (you)' : ''}</span>
+          <span className="rmeta"><span>${r.visitType}</span><button className="linkish" onClick=${() => this.toast('Posted ' + full(r.createdAt))} title=${full(r.createdAt) + (r.updatedAt ? ' · edited ' + full(r.updatedAt) : '')}>${rel(r.createdAt)}</button>${r.updatedAt ? html`<span>edited</span>` : null}</span>
+        </div>
+        <span className="badge" style=${{flex:'none',background:t.bg,color:t.fg}} aria-label=${r.rating + ' out of 5 stars'}>${r.rating}<${Star} /></span>
+      </div>
+      ${r.title && html`<h5 style=${{overflowWrap:'anywhere'}}>${r.title}</h5>`}
+      <p className="rtext">${r.text}</p>
+      ${r.photos.length > 0 && html`<div style=${{display:'flex',gap:8,flexWrap:'wrap'}}>${r.photos.map((src,i) => html`<img key=${i} className="rphoto" src=${src} alt=${'Photo ' + (i+1) + ' from ' + r.authorName} />`)}</div>`}
+      ${r.dishes.length > 0 && html`<div style=${{display:'flex',flexWrap:'wrap',gap:6,alignItems:'center'}}><span className="label">Tried</span>${r.dishes.map(d => html`<span className="tag" key=${d}>${d}</span>`)}</div>`}
+      ${r.subRatings && html`<span className="muted" style=${{fontSize:12}}>${SUBS.filter(([k]) => r.subRatings[k]).map(([k,l]) => l + ' ' + r.subRatings[k]).join('  ·  ')}</span>`}
+      ${flags > 0 && html`<span className="flagged">Reported by ${flags} ${flags === 1 ? 'person' : 'people'}</span>`}
+      <div style=${{display:'flex',flexWrap:'wrap',gap:'4px 8px',alignItems:'center',marginTop:2}}>
+        <button className="helpful" onClick=${() => this.toggleHelpful(r.id)} disabled=${mine} aria-pressed=${voted} title=${mine ? 'You can’t vote on your own review' : voted ? 'Remove your helpful vote' : 'Mark as helpful'}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg>Helpful · ${r.helpfulCount}
+        </button>
+        ${mine && html`<button className="btn btn-ghost btn-ink" onClick=${() => this.openForm(r.restaurantId, r)} style=${{minHeight:40}}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>Edit</button>`}
+        ${canDelete && html`<button className="btn btn-ghost" onClick=${() => this.setState({confirmDel:r.id})} style=${{minHeight:40}}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>Delete</button>`}
+        <button className="report" onClick=${() => this.report(r.id)} disabled=${reported} aria-label=${reported ? 'Review reported' : 'Report review by ' + r.authorName}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>${reported ? 'Reported' : 'Report'}
+        </button>
+      </div>
+    </article>`;
+  }
+
+  renderMine(mineList){
+    const s = this.state;
+    return html`<main className="wrap" style=${{maxWidth:860,paddingBlock:'28px 72px'}}>
+      ${this.statusNotice()}
+      <div style=${{paddingBottom:20,borderBottom:'2px solid var(--color-text)'}}>
+        <h6 className="kicker" style=${{marginBottom:10}}>Signed as ${s.myName || 'guest'}</h6>
+        <h1 className="display">My reviews</h1>
+      </div>
+      ${mineList.length === 0 && html`<div style=${{padding:'48px 0',display:'flex',flexDirection:'column',alignItems:'flex-start',gap:12}}>
+        <h3>Nothing written yet.</h3>
+        <p className="muted">Open any restaurant and leave a rating. It takes under thirty seconds.</p>
+        <button className="btn btn-secondary" onClick=${() => this.go('explore')}>Browse restaurants</button>
+      </div>`}
+      ${mineList.map(r => { const t = tone(r.rating, 1), rr = restById(r.restaurantId); return html`<article className="mine panel" key=${r.id}>
+        <span className="badge" style=${{background:t.bg,color:t.fg}}>${r.rating}★</span>
+        <div style=${{display:'flex',flexWrap:'wrap',justifyContent:'space-between',gap:'4px 12px',alignItems:'baseline'}}>
+          <button className="mine-name" onClick=${() => this.openRest(r.restaurantId)}>${rr ? rr.name : 'Unknown'}</button>
+          <span title=${full(r.createdAt)} className="muted" style=${{fontSize:12}}>${rel(r.createdAt)} · ${r.visitType}</span>
+        </div>
+        <p style=${{fontSize:15,textWrap:'pretty',overflowWrap:'anywhere'}}>${r.title && html`<strong>${r.title} — </strong>`}${r.text.length > 220 ? r.text.slice(0,220) + '…' : r.text}</p>
+        <div style=${{display:'flex',gap:8}}>
+          <button className="btn btn-secondary" onClick=${() => this.openForm(r.restaurantId, r)} style=${{minHeight:40}}>Edit</button>
+          <button className="btn btn-ghost" onClick=${() => this.setState({confirmDel:r.id})} style=${{minHeight:40}}>Delete</button>
+        </div>
+      </article>`; })}
+    </main>`;
+  }
+
+  renderForm(){
+    const f = this.state.form, fr = restById(f.restId);
+    const shown = f.hover || f.rating, len = f.text.trim().length, ok = this.canSubmit(f);
+    const textErr = (f.tried || f.blurText) && len < 10;
+    const nameErr = (f.tried || f.blurName) && !f.name.trim();
+    const onStarKey = e => { const cur = this.state.form.rating || 0; let v;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') v = Math.min(5, cur + 1); else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') v = Math.max(1, cur - 1); else if (e.key === 'Home') v = 1; else if (e.key === 'End') v = 5; else return;
+      e.preventDefault(); this.patchForm({rating:v, hover:0}); requestAnimationFrame(() => { const b = this.starRef.current && this.starRef.current.querySelectorAll('button')[v-1]; b && b.focus(); }); };
+    const submitHint = ok ? 'Posts publicly under the name above. Anyone with the link can read it.' : !f.rating && len < 10 ? 'Add a star rating and at least 10 characters to post.' : !f.rating ? 'Add a star rating to post.' : len < 10 ? 'Write at least 10 characters to post.' : 'Add your name to post.';
+    const close = () => this.setState({form:null});
+    return html`<div className="backdrop" onClick=${close}>
+      <form className="dialog" role="dialog" aria-modal="true" aria-labelledby="pi-form-title" onClick=${e => e.stopPropagation()} onSubmit=${e => this.submit(e)} noValidate>
+        <div style=${{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12}}>
+          <div>
+            <h6 className="kicker" style=${{marginBottom:6}}>${f.editId ? 'Edit your review' : 'Write a review'}</h6>
+            <h2 id="pi-form-title" style=${{fontSize:'clamp(24px,5vw,32px)'}}>${fr ? fr.name : ''}</h2>
+          </div>
+          <button type="button" className="btn btn-secondary" onClick=${close} aria-label="Close" style=${{width:44,height:44,padding:0,flex:'none'}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+        </div>
+
+        <div className="rule2" style=${{display:'flex',flexDirection:'column',gap:8}}>
+          <span id="pi-rating-label" style=${{fontSize:12,fontWeight:600}}>Overall rating <span className="req">*</span></span>
+          <div style=${{display:'flex',flexWrap:'wrap',alignItems:'center',gap:'8px 16px'}}>
+            <div ref=${this.starRef} role="radiogroup" aria-labelledby="pi-rating-label" onKeyDown=${onStarKey} onMouseLeave=${() => this.patchForm({hover:0})} style=${{display:'flex',gap:2}}>
+              ${[1,2,3,4,5].map(i => { const on = i <= shown; return html`<button type="button" key=${i} className="starbtn" role="radio" aria-checked=${f.rating === i} aria-label=${i + (i > 1 ? ' stars' : ' star') + ' — ' + WORDS[i]} tabIndex=${(f.rating ? f.rating === i : i === 1) ? 0 : -1}
+                onClick=${() => this.patchForm({rating:i})} onMouseEnter=${() => this.patchForm({hover:i})} onFocus=${() => this.patchForm({hover:i})} onBlur=${() => this.patchForm({hover:0})} style=${{color: on ? 'var(--color-accent)' : 'var(--color-neutral-500)'}}>
+                <${Star} size=${38} sw=${1.6} fill=${on ? 'var(--color-accent)' : 'none'} style=${{transform: on ? 'scale(1.06)' : 'scale(0.9)'}} />
+              </button>`; })}
+            </div>
+            <span aria-live="polite" style=${{fontFamily:'var(--font-heading)',fontWeight:800,fontSize:18}}>${shown ? WORDS[shown] : 'Tap a star'}</span>
+          </div>
+          ${f.tried && !f.rating && html`<span role="alert" className="err">Choose a star rating. Tap a star or use the arrow keys.</span>`}
+        </div>
+
+        <div style=${{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,220px),1fr))',gap:16}}>
+          <div className="field">
+            <label htmlFor="pi-name">Your name <span className="req">*</span></label>
+            <input id="pi-name" className="input" value=${f.name} onChange=${e => this.patchForm({name:e.target.value})} onBlur=${() => this.patchForm({blurName:true})} maxLength="60" autoComplete="name" aria-invalid=${nameErr} />
+            ${nameErr && html`<span role="alert" className="err">Add your name so others know who's talking.</span>`}
+          </div>
+          <div className="field">
+            <label htmlFor="pi-title">Title <span className="opt">(optional)</span></label>
+            <input id="pi-title" className="input" value=${f.title} onChange=${e => this.patchForm({title:e.target.value})} maxLength="100" placeholder="Sum it up in a line" />
+          </div>
+        </div>
+
+        <div className="field">
+          <div style=${{display:'flex',justifyContent:'space-between',alignItems:'baseline'}}><label htmlFor="pi-text">Your review <span className="req">*</span></label><span aria-live="polite" style=${{fontSize:12,fontVariantNumeric:'tabular-nums',color: f.text.length > 950 ? 'var(--color-accent-700)' : 'var(--color-neutral-700)'}}>${f.text.length} / 1000</span></div>
+          <textarea id="pi-text" className="input" value=${f.text} onChange=${e => this.patchForm({text:e.target.value.slice(0,1000)})} onBlur=${() => this.patchForm({blurText:true})} maxLength="1000" rows="5" aria-invalid=${textErr} aria-describedby="pi-text-hint" placeholder="What did you eat? How was the service? Would you go back?"></textarea>
+          <span id="pi-text-hint" style=${{fontSize:13,color: textErr ? 'var(--color-accent-700)' : 'var(--color-neutral-700)'}}>${textErr ? 'Write at least 10 characters. ' + (10 - len) + ' to go.' : len < 10 ? 'Minimum 10 characters.' : 'Looks good.'}</span>
+        </div>
+
+        <div style=${{display:'flex',flexDirection:'column',gap:6}}>
+          <span className="flabel" id="pi-visit-l">Visit type</span>
+          <div className="seg" role="radiogroup" aria-labelledby="pi-visit-l" style=${{maxWidth:420}}>${VISITS.map(v => html`<label className="seg-opt" key=${v} style=${{minHeight:44}}><input type="radio" name="pi-visit" checked=${f.visitType === v} onChange=${() => this.patchForm({visitType:v})} />${v}</label>`)}</div>
+        </div>
+
+        <div style=${{display:'flex',flexDirection:'column',gap:6}}>
+          <span className="flabel">Dishes you tried <span className="opt">(optional)</span></span>
+          <div style=${{display:'flex',flexWrap:'wrap',gap:6}}>${(fr ? fr.popularDishes : []).map(n => { const on = f.dishes.includes(n); return html`<button type="button" key=${n} className="chip" aria-pressed=${on} onClick=${() => this.patchForm({dishes: on ? f.dishes.filter(x => x !== n) : f.dishes.concat(n)})}>${n}</button>`; })}</div>
+        </div>
+
+        <div style=${{display:'flex',flexDirection:'column',gap:6}}>
+          <span className="flabel">Rate the details <span className="opt">(optional)</span></span>
+          <div className="subrows">${SUBS.map(([k,l]) => html`<div className="subrow" key=${k}>
+            <span>${l}</span>
+            <div role="group" aria-label=${l + ' rating'} style=${{display:'flex'}}>${[1,2,3,4,5].map(i => { const on = i <= f.sub[k]; return html`<button type="button" key=${i} className="substar" aria-label=${l + ' ' + i + ' of 5'} aria-pressed=${f.sub[k] === i} onClick=${() => this.patchForm({sub: Object.assign({}, f.sub, {[k]: f.sub[k] === i ? 0 : i})})} style=${{color: on ? 'var(--color-text)' : 'var(--color-neutral-500)'}}><${Star} size=${20} sw=${1.8} fill=${on ? 'var(--color-text)' : 'none'} /></button>`; })}</div>
+          </div>`)}</div>
+        </div>
+
+        <div style=${{display:'flex',flexDirection:'column',gap:8}}>
+          <span className="flabel">Photos <span className="opt">(up to 3)</span></span>
+          <div style=${{display:'flex',flexWrap:'wrap',gap:8}}>
+            ${f.photos.map((src,i) => html`<div className="fphoto" key=${i}><img src=${src} alt=${'Your photo ' + (i+1)} /><button type="button" onClick=${() => this.patchForm({photos: f.photos.filter((_,j) => j !== i)})} aria-label=${'Remove photo ' + (i+1)}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>`)}
+            ${f.photos.length < 3 && html`<label className="addphoto">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M16 5h6"></path><path d="M19 2v6"></path><path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"></path><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path><circle cx="9" cy="9" r="2"></circle></svg>Add photo
+              <input id="pi-photos" type="file" accept="image/*" multiple onChange=${e => this.addPhotos(e)} />
+            </label>`}
+          </div>
+        </div>
+
+        <div className="rule2" style=${{display:'flex',flexWrap:'wrap',alignItems:'center',gap:12}}>
+          <span className="muted" style=${{flex:'1 1 200px',fontSize:13}}>${submitHint}</span>
+          <button type="button" className="btn btn-secondary" onClick=${close} style=${{minHeight:48}}>Cancel</button>
+          <button type="submit" className="btn btn-primary" disabled=${!ok || f.saving} style=${{minHeight:48,minWidth:180,justifyContent:'flex-start',fontSize:15}}>${f.saving ? 'Saving…' : f.editId ? 'Save changes' : 'Post review'}</button>
+        </div>
+      </form>
+    </div>`;
+  }
+
+  renderConfirm(all){
+    const r = all.find(x => x.id === this.state.confirmDel); if (!r) return null;
+    const cancel = () => this.setState({confirmDel:null});
+    const mine = r.authorId && r.authorId === this.state.uid;
+    return html`<div className="backdrop center" onClick=${cancel}>
+      <div className="dialog small" role="alertdialog" aria-modal="true" aria-labelledby="pi-del-title" onClick=${e => e.stopPropagation()}>
+        <div id="pi-del-title" style=${{fontFamily:'var(--font-heading)',fontWeight:800,fontSize:20}}>Delete this review?</div>
+        <div style=${{fontSize:14}}>${mine ? 'Your' : r.authorName + '’s'} rating for ${(restById(r.restaurantId) || {}).name} will be removed for everyone and the average recalculated. This can't be undone.</div>
+        <div className="dialog-actions">
+          <button className="btn btn-secondary" onClick=${cancel}>Keep it</button>
+          <button className="btn btn-primary" onClick=${() => this.doDelete()}>Delete review</button>
+        </div>
+      </div>
+    </div>`;
+  }
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(html`<${App} />`);
+})();
+</script>
