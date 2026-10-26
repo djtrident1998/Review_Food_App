@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-48b6287d-4708-4f30-ab49-b426b8bbd28c/styles.css">
+<script src="_ds/modernist-48b6287d-4708-4f30-ab49-b426b8bbd28c/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-bg)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-600)}</style>
+</helmet>
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+<header style="position:sticky;top:0;z-index:20;background:var(--color-bg);border-bottom:2px solid var(--color-text)">
+  <div style="max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:stretch;gap:8px 16px;flex-wrap:wrap">
+    <button onClick="{{ goExplore }}" aria-label="Plate Index home" style="display:flex;align-items:center;gap:10px;min-height:60px;padding:0;border:0;background:none;cursor:pointer;color:var(--color-text);font-family:var(--font-heading);font-weight:800;font-size:19px;letter-spacing:-0.02em">
+      <span style="width:18px;height:18px;background:var(--color-accent);display:block"></span>Plate Index
+    </button>
+    <nav aria-label="Main" style="display:flex;margin-left:auto">
+      <button onClick="{{ goExplore }}" aria-current="{{ curExplore }}" style="min-height:60px;padding:0 14px;border:0;border-bottom:4px solid {{ lineExplore }};background:none;cursor:pointer;font:600 14px var(--font-body);color:var(--color-text)" style-hover="background:var(--color-surface)">Explore</button>
+      <button onClick="{{ goSaved }}" aria-current="{{ curSaved }}" style="min-height:60px;padding:0 14px;border:0;border-bottom:4px solid {{ lineSaved }};background:none;cursor:pointer;font:600 14px var(--font-body);color:var(--color-text);display:flex;align-items:center;gap:6px" style-hover="background:var(--color-surface)">Saved <span style="font-size:11px;color:var(--color-neutral-700)">{{ savedCount }}</span></button>
+      <button onClick="{{ goMine }}" aria-current="{{ curMine }}" style="min-height:60px;padding:0 14px;border:0;border-bottom:4px solid {{ lineMine }};background:none;cursor:pointer;font:600 14px var(--font-body);color:var(--color-text);display:flex;align-items:center;gap:6px" style-hover="background:var(--color-surface)">My reviews <span style="font-size:11px;color:var(--color-neutral-700)">{{ mineCount }}</span></button>
+    </nav>
+  </div>
+</header>
+
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<main style="max-width:1200px;margin:0 auto;padding:28px 16px 72px">
+  <sc-if value="{{ isExplore }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px 40px;align-items:end;padding-bottom:24px">
+      <div>
+        <h6 style="color:var(--color-accent-700);margin:0 0 10px">Bengaluru · {{ totalRestaurants }} kitchens indexed</h6>
+        <h1 style="margin:0;font-size:clamp(34px,7vw,64px);line-height:0.95;letter-spacing:-0.035em;text-wrap:balance">Find a table. Leave a verdict.</h1>
+      </div>
+      <label style="display:flex;align-items:center;gap:10px;border:2px solid var(--color-text);background:var(--color-surface);padding:0 12px;min-height:52px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search restaurants</span>
+        <input type="search" value="{{ search }}" onChange="{{ setSearch }}" placeholder="Search by name or cuisine" style="flex:1;min-width:0;border:0;background:transparent;font:16px var(--font-body);color:var(--color-text);min-height:48px;outline:none">
+      </label>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:4px 24px;border-top:2px solid var(--color-text);border-bottom:2px solid var(--color-text);padding:14px 0">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label for="pi-cuisine" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Cuisine</label>
+        <select id="pi-cuisine" class="input" value="{{ cuisine }}" onChange="{{ setCuisine }}" style="min-height:44px;cursor:pointer">
+          <sc-for list="{{ cuisineOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for>
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Min rating</span>
+        <div class="seg" role="radiogroup" aria-label="Minimum rating" style="display:flex">
+          <sc-for list="{{ ratingOpts }}" as="o" hint-placeholder-count="4"><label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:42px"><input type="radio" name="pi-minr" checked="{{ o.checked }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Price</span>
+        <div class="seg" role="radiogroup" aria-label="Price range" style="display:flex">
+          <sc-for list="{{ priceOpts }}" as="o" hint-placeholder-count="4"><label class="seg-opt" style="flex:1;justify-content:flex-start;min-height:42px"><input type="radio" name="pi-price" checked="{{ o.checked }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Diet</span>
+        <button role="switch" aria-checked="{{ vegOnly }}" onClick="{{ toggleVeg }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:0 12px;border:1px solid var(--color-divider);background:{{ vegBg }};color:{{ vegFg }};cursor:pointer;font:14px var(--font-body);text-align:left">Veg only<span style="width:32px;height:16px;border:2px solid currentColor;display:flex;justify-content:{{ vegKnob }};padding:1px"><span style="width:10px;height:10px;background:currentColor;display:block"></span></span></button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label for="pi-sort" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Sort by</label>
+        <select id="pi-sort" class="input" value="{{ sort }}" onChange="{{ setSort }}" style="min-height:44px;cursor:pointer">
+          <option value="top">Top rated</option>
+          <option value="reviewed">Most reviewed</option>
+          <option value="price">Price: low to high</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}">
+    <div style="padding-bottom:20px;border-bottom:2px solid var(--color-text)">
+      <h6 style="color:var(--color-accent-700);margin:0 0 10px">Your shortlist</h6>
+      <h1 style="margin:0;font-size:clamp(34px,7vw,64px);line-height:0.95;letter-spacing:-0.035em">Saved</h1>
+    </div>
+  </sc-if>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0 24px;min-height:44px">
+    <span style="font-size:14px"><strong>{{ resultCount }}</strong> {{ resultNoun }}</span>
+    <sc-if value="{{ filtersActive }}" hint-placeholder-val="{{ false }}"><button class="btn btn-ghost" onClick="{{ clearFilters }}" style="min-height:44px">Clear filters</button></sc-if>
+  </div>
+
+  <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+    <div aria-busy="true" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:36px 24px">
+      <sc-for list="{{ skeletons }}" as="k" hint-placeholder-count="6">
+        <div style="border-top:2px solid var(--color-neutral-300);display:flex;flex-direction:column;gap:10px">
+          <div style="aspect-ratio:16/10;background:var(--color-surface)"></div>
+          <div style="height:20px;width:70%;background:var(--color-surface)"></div>
+          <div style="height:14px;width:45%;background:var(--color-surface)"></div>
+          <div style="height:14px;width:85%;background:var(--color-surface)"></div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showCards }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:36px 24px">
+      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="6">
+        <article style="position:relative;border-top:2px solid var(--color-text);background:var(--color-bg);transition:transform .2s ease, box-shadow .2s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)">
+          <button onClick="{{ c.open }}" aria-label="{{ c.aria }}" style="display:flex;flex-direction:column;width:100%;padding:0;border:0;background:none;text-align:left;cursor:pointer;font:inherit;color:inherit">
+            <div style="aspect-ratio:16/10;width:100%;background:var(--color-surface);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:14px">
+              <span aria-hidden="true" style="position:absolute;right:-4px;bottom:-30px;font-family:var(--font-heading);font-weight:800;font-size:168px;line-height:1;letter-spacing:-0.07em;color:var(--color-neutral-300)">{{ c.mark }}</span>
+              <span style="position:relative;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600">{{ c.cuisineMain }}</span>
+            </div>
+            <div style="padding:14px 0 4px;display:flex;flex-direction:column;gap:10px;width:100%">
+              <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+                <span style="font-family:var(--font-heading);font-weight:800;font-size:20px;line-height:1.15;letter-spacing:-0.015em;text-wrap:pretty">{{ c.name }}</span>
+                <span style="flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+                  <span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;font-weight:800;font-size:14px;background:{{ c.toneBg }};color:{{ c.toneFg }}">{{ c.avgLabel }}<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+                  <span style="font-size:11px;color:var(--color-neutral-700)">{{ c.countLabel }}</span>
+                </span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <sc-for list="{{ c.cuisines }}" as="cu" hint-placeholder-count="2"><span class="tag tag-neutral">{{ cu }}</span></sc-for>
+                <sc-if value="{{ c.isVeg }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="border-color:var(--color-text);color:var(--color-text)">Pure veg</span></sc-if>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;font-size:13px;color:var(--color-neutral-700);border-top:1px solid var(--color-divider);padding-top:9px">
+                <span><strong style="color:var(--color-text)">{{ c.price }}</strong><span style="opacity:0.35">{{ c.priceDim }}</span></span>
+                <span>{{ c.area }}</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;color:var(--color-text)"><span style="width:8px;height:8px;display:block;background:{{ c.openDot }}"></span>{{ c.openLabel }}</span>
+              </div>
+            </div>
+          </button>
+          <button onClick="{{ c.toggleSave }}" aria-label="{{ c.saveLabel }}" aria-pressed="{{ c.saved }}" style="position:absolute;top:10px;right:10px;width:44px;height:44px;display:grid;place-items:center;border:0;background:var(--color-bg);cursor:pointer;color:{{ c.saveColor }}" style-hover="background:var(--color-accent-100)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="{{ c.saveFill }}" stroke="currentColor" stroke-width="2" stroke-linejoin="miter" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
+          </button>
+        </article>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+    <div style="border-top:2px solid var(--color-text);padding:48px 0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;max-width:520px">
+      <h3 style="margin:0">{{ emptyTitle }}</h3>
+      <p style="margin:0;color:var(--color-neutral-700)">{{ emptyBody }}</p>
+      <button class="btn btn-secondary" onClick="{{ emptyAction }}" style="min-height:44px">{{ emptyCta }}</button>
+    </div>
+  </sc-if>
+</main>
+</sc-if>
+
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1200px;margin:0 auto;padding:16px 16px 0">
+  <button class="btn btn-ghost" onClick="{{ goBack }}" style="min-height:44px;color:var(--color-text);padding-inline:0;gap:8px">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>{{ backLabel }}
+  </button>
+
+  <div style="margin-top:12px;background:var(--color-surface);position:relative;overflow:hidden;min-height:clamp(170px,26vw,300px);display:flex;align-items:flex-end;padding:20px;border-top:2px solid var(--color-text)">
+    <span aria-hidden="true" style="position:absolute;right:-10px;bottom:-0.24em;font-family:var(--font-heading);font-weight:800;font-size:clamp(200px,34vw,420px);line-height:1;letter-spacing:-0.07em;color:var(--color-neutral-300)">{{ d.mark }}</span>
+    <div style="position:relative;display:flex;flex-direction:column;gap:12px;max-width:760px">
+      <span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600">{{ d.cuisinesStr }}</span>
+      <h1 style="margin:0;font-size:clamp(34px,6.5vw,72px);line-height:0.95;letter-spacing:-0.035em;text-wrap:balance">{{ d.name }}</h1>
+    </div>
+    <button onClick="{{ d.toggleSave }}" aria-label="{{ d.saveLabel }}" aria-pressed="{{ d.saved }}" style="position:absolute;top:14px;right:14px;min-height:44px;padding:0 14px;display:flex;align-items:center;gap:8px;border:0;background:var(--color-bg);cursor:pointer;font:600 13px var(--font-body);color:{{ d.saveColor }}" style-hover="background:var(--color-accent-100)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ d.saveFill }}" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>{{ d.saveText }}
+    </button>
+  </div>
+
+  <dl style="margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:0 24px;border-bottom:2px solid var(--color-text)">
+    <div style="padding:14px 0;border-bottom:1px solid var(--color-divider)"><dt style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Address</dt><dd style="margin:4px 0 0;font-size:14px">{{ d.address }}</dd></div>
+    <div style="padding:14px 0;border-bottom:1px solid var(--color-divider)"><dt style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Hours</dt><dd style="margin:4px 0 0;font-size:14px;display:flex;flex-direction:column"><span>{{ d.hours }}</span><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--color-neutral-700)"><span style="width:8px;height:8px;display:block;background:{{ d.openDot }}"></span>{{ d.openLabel }}</span></dd></div>
+    <div style="padding:14px 0;border-bottom:1px solid var(--color-divider)"><dt style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Price for two</dt><dd style="margin:4px 0 0;font-size:14px"><strong>{{ d.price }}</strong><span style="opacity:0.35">{{ d.priceDim }}</span> · {{ d.priceNote }}</dd></div>
+    <div style="padding:14px 0;border-bottom:1px solid var(--color-divider)"><dt style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Diet</dt><dd style="margin:4px 0 0;font-size:14px">{{ d.diet }}</dd></div>
+  </dl>
+
+  <div style="display:flex;flex-wrap:wrap;gap:40px;margin-top:32px;align-items:flex-start">
+    <aside style="flex:1 1 300px;display:flex;flex-direction:column;gap:36px;min-width:0">
+      <section aria-label="Rating breakdown" style="display:flex;flex-direction:column;gap:16px">
+        <h6 style="margin:0;color:var(--color-neutral-700)">Rating</h6>
+        <div style="display:flex;align-items:flex-end;gap:16px">
+          <span style="font-family:var(--font-heading);font-weight:800;font-size:96px;line-height:0.8;letter-spacing:-0.06em">{{ d.avgLabel }}</span>
+          <div style="display:flex;flex-direction:column;gap:6px;padding-bottom:2px">
+            <span style="display:inline-flex;align-self:flex-start;padding:3px 8px;font-weight:800;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;background:{{ d.toneBg }};color:{{ d.toneFg }}">{{ d.verdict }}</span>
+            <div style="display:flex;gap:2px;color:var(--color-accent)" aria-hidden="true">
+              <sc-for list="{{ d.stars }}" as="st" hint-placeholder-count="5"><svg width="18" height="18" viewBox="0 0 24 24" fill="{{ st.fill }}" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></sc-for>
+            </div>
+            <span style="font-size:13px;color:var(--color-neutral-700)">{{ d.countLabel }}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--color-text);padding-top:14px">
+          <sc-for list="{{ d.dist }}" as="b" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:30px minmax(0,1fr) 28px;align-items:center;gap:10px;font-size:13px" aria-label="{{ b.aria }}">
+              <span style="font-weight:600">{{ b.star }}★</span>
+              <div style="height:12px;background:var(--color-surface)"><div style="height:100%;width:{{ b.pct }};background:{{ b.color }};transition:width .6s cubic-bezier(.2,.7,.2,1)"></div></div>
+              <span style="text-align:right;color:var(--color-neutral-700)">{{ b.count }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <section aria-label="Popular dishes" style="display:flex;flex-direction:column">
+        <h6 style="margin:0 0 6px;color:var(--color-neutral-700)">Popular dishes</h6>
+        <ol style="list-style:none;margin:0;padding:0;border-top:2px solid var(--color-text)">
+          <sc-for list="{{ d.dishes }}" as="ds" hint-placeholder-count="4">
+            <li style="display:grid;grid-template-columns:36px 1fr auto;gap:8px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--color-divider);font-size:15px"><span style="font-size:12px;font-weight:600;color:var(--color-accent-700)">{{ ds.n }}</span><span>{{ ds.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ ds.mentions }}</span></li>
+          </sc-for>
+        </ol>
+      </section>
+    </aside>
+
+    <section aria-label="Reviews" ref="{{ reviewsRef }}" style="flex:2 1 460px;min-width:0;scroll-margin-top:80px">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:2px solid var(--color-text);padding-bottom:12px">
+        <h3 style="margin:0">Reviews <span style="color:var(--color-neutral-600)">{{ d.count }}</span></h3>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label for="pi-rsort" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Sort</label>
+          <select id="pi-rsort" class="input" value="{{ reviewSort }}" onChange="{{ setReviewSort }}" style="min-height:44px;width:auto;cursor:pointer">
+            <option value="newest">Newest first</option>
+            <option value="highest">Highest rated</option>
+            <option value="lowest">Lowest rated</option>
+            <option value="helpful">Most helpful</option>
+          </select>
+        </div>
+      </div>
+
+      <sc-if value="{{ d.empty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:40px 0;display:flex;flex-direction:column;align-items:flex-start;gap:10px">
+          <h4 style="margin:0">No reviews yet.</h4>
+          <p style="margin:0;color:var(--color-neutral-700)">Be the first to review {{ d.name }}.</p>
+          <button class="btn btn-primary" onClick="{{ openNew }}" style="min-height:44px">Write the first review</button>
+        </div>
+      </sc-if>
+
+      <sc-for list="{{ d.reviews }}" as="rv" hint-placeholder-count="3">
+        <article style="padding:22px 12px;margin:0 -12px;border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column;gap:10px;background:{{ rv.flashBg }};transition:background 1.4s ease">
+          <div style="display:flex;gap:12px;align-items:center">
+            <span aria-hidden="true" style="width:40px;height:40px;flex:none;display:grid;place-items:center;background:{{ rv.avBg }};color:var(--color-bg);font-weight:800;font-size:14px">{{ rv.initials }}</span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+              <span style="font-weight:600;font-size:15px">{{ rv.author }}</span>
+              <span style="font-size:12px;color:var(--color-neutral-700);display:flex;flex-wrap:wrap;gap:2px 8px"><span>{{ rv.visitType }}</span><button onClick="{{ rv.showDate }}" title="{{ rv.full }}" style="padding:0;border:0;background:none;font:inherit;color:inherit;cursor:help;text-decoration:underline dotted;text-underline-offset:3px">{{ rv.rel }}</button><sc-if value="{{ rv.edited }}" hint-placeholder-val="{{ false }}"><span>edited</span></sc-if></span>
+            </div>
+            <span style="flex:none;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;font-weight:800;font-size:14px;background:{{ rv.toneBg }};color:{{ rv.toneFg }}" aria-label="{{ rv.ratingAria }}">{{ rv.rating }}<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+          </div>
+          <sc-if value="{{ rv.hasTitle }}" hint-placeholder-val="{{ false }}"><h5 style="margin:0;font-size:17px">{{ rv.title }}</h5></sc-if>
+          <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty;white-space:pre-line">{{ rv.text }}</p>
+          <sc-if value="{{ rv.hasPhotos }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ rv.photos }}" as="ph" hint-placeholder-count="1"><img class="grayscale" src="{{ ph.src }}" alt="{{ ph.alt }}" style="width:96px;height:96px;object-fit:cover"></sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ rv.hasDishes }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">Tried</span><sc-for list="{{ rv.dishes }}" as="dt" hint-placeholder-count="2"><span class="tag tag-neutral">{{ dt }}</span></sc-for></div>
+          </sc-if>
+          <sc-if value="{{ rv.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">{{ rv.sub }}</span></sc-if>
+          <div style="display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin-top:2px">
+            <button onClick="{{ rv.onHelpful }}" disabled="{{ rv.mine }}" aria-pressed="{{ rv.voted }}" title="{{ rv.helpTitle }}" style="display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border:1px solid var(--color-divider);background:{{ rv.helpBg }};color:{{ rv.helpFg }};cursor:pointer;font:600 13px var(--font-body)" style-hover="border-color:var(--color-text)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg>Helpful · {{ rv.helpfulCount }}
+            </button>
+            <sc-if value="{{ rv.mine }}" hint-placeholder-val="{{ false }}">
+              <button class="btn btn-ghost" onClick="{{ rv.onEdit }}" style="min-height:40px;color:var(--color-text);padding-inline:8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>Edit</button>
+              <button class="btn btn-ghost" onClick="{{ rv.onDelete }}" style="min-height:40px;color:var(--color-accent-700);padding-inline:8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>Delete</button>
+            </sc-if>
+            <button onClick="{{ rv.onReport }}" disabled="{{ rv.reported }}" aria-label="{{ rv.reportAria }}" style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 8px;border:0;background:none;color:var(--color-neutral-700);cursor:pointer;font:13px var(--font-body)" style-hover="color:var(--color-text)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>{{ rv.reportText }}
+            </button>
+          </div>
+        </article>
+      </sc-for>
+    </section>
+  </div>
+
+  <div style="position:sticky;bottom:0;z-index:10;margin:40px -16px 0;padding:12px 16px;background:var(--color-bg);border-top:2px solid var(--color-text)">
+    <div style="max-width:1168px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between">
+      <span style="font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><strong>{{ d.name }}</strong> · {{ d.avgLabel }}★</span>
+      <button class="btn btn-primary" onClick="{{ openNew }}" style="min-height:48px;flex:0 0 auto;min-width:min(240px,50vw);justify-content:space-between;gap:16px;font-size:15px">Write a review<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    </div>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ isMine }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:860px;margin:0 auto;padding:28px 16px 72px">
+  <div style="padding-bottom:20px;border-bottom:2px solid var(--color-text)">
+    <h6 style="color:var(--color-accent-700);margin:0 0 10px">Signed as {{ myName }}</h6>
+    <h1 style="margin:0;font-size:clamp(34px,7vw,64px);line-height:0.95;letter-spacing:-0.035em">My reviews</h1>
+  </div>
+  <sc-if value="{{ mineEmpty }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:48px 0;display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+      <h3 style="margin:0">Nothing written yet.</h3>
+      <p style="margin:0;color:var(--color-neutral-700)">Open any restaurant and leave a rating — it takes under thirty seconds.</p>
+      <button class="btn btn-secondary" onClick="{{ goExplore }}" style="min-height:44px">Browse restaurants</button>
+    </div>
+  </sc-if>
+  <sc-for list="{{ mine }}" as="m" hint-placeholder-count="0">
+    <article style="padding:20px 0;border-bottom:1px solid var(--color-divider);display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px">
+      <span style="grid-row:span 3;display:inline-flex;align-self:start;align-items:center;gap:4px;padding:3px 8px;font-weight:800;font-size:14px;background:{{ m.toneBg }};color:{{ m.toneFg }}">{{ m.rating }}★</span>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline">
+        <button onClick="{{ m.openRest }}" style="padding:0;border:0;background:none;cursor:pointer;font-family:var(--font-heading);font-weight:800;font-size:20px;color:var(--color-text);text-align:left" style-hover="color:var(--color-accent-700)">{{ m.restName }}</button>
+        <span title="{{ m.full }}" style="font-size:12px;color:var(--color-neutral-700)">{{ m.rel }} · {{ m.visitType }}</span>
+      </div>
+      <p style="margin:0;font-size:15px;text-wrap:pretty"><sc-if value="{{ m.hasTitle }}" hint-placeholder-val="{{ false }}"><strong>{{ m.title }} — </strong></sc-if>{{ m.text }}</p>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" onClick="{{ m.onEdit }}" style="min-height:40px">Edit</button>
+        <button class="btn btn-ghost" onClick="{{ m.onDelete }}" style="min-height:40px;color:var(--color-accent-700);padding-inline:10px">Delete</button>
+      </div>
+    </article>
+  </sc-for>
+</main>
+</sc-if>
+
+<sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+<div class="dialog-backdrop" onClick="{{ closeForm }}" style="z-index:50;overflow-y:auto;place-items:start center;padding:clamp(0px,4vw,40px) clamp(0px,3vw,16px)">
+  <form class="dialog" role="dialog" aria-modal="true" aria-labelledby="pi-form-title" onClick="{{ stop }}" onSubmit="{{ submit }}" noValidate="{{ true }}" style="width:min(660px,100%);gap:22px;padding:24px clamp(16px,4vw,32px);background:var(--color-bg);border-top:6px solid var(--color-accent)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+      <div>
+        <h6 style="margin:0 0 6px;color:var(--color-accent-700)">{{ formKicker }}</h6>
+        <h2 id="pi-form-title" style="margin:0;font-size:clamp(24px,5vw,32px)">{{ formRestName }}</h2>
+      </div>
+      <button type="button" class="btn btn-secondary btn-icon" onClick="{{ closeForm }}" aria-label="Close" style="width:44px;height:44px;flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--color-text);padding-top:16px">
+      <span id="pi-rating-label" style="font-size:12px;font-weight:600;color:var(--color-neutral-800)">Overall rating <span style="color:var(--color-accent-700)">*</span></span>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px">
+        <div ref="{{ starRef }}" role="radiogroup" aria-labelledby="pi-rating-label" onKeyDown="{{ onStarKey }}" onMouseLeave="{{ clearHover }}" style="display:flex;gap:2px">
+          <sc-for list="{{ formStars }}" as="s" hint-placeholder-count="5">
+            <button type="button" role="radio" aria-checked="{{ s.checked }}" aria-label="{{ s.label }}" tabIndex="{{ s.tab }}" onClick="{{ s.onClick }}" onMouseEnter="{{ s.onEnter }}" onFocus="{{ s.onEnter }}" style="width:48px;height:48px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:{{ s.stroke }}">
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="{{ s.fill }}" stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter" aria-hidden="true" style="transform:{{ s.scale }};transition:transform .18s cubic-bezier(.3,1.6,.5,1), fill .15s"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </button>
+          </sc-for>
+        </div>
+        <span aria-live="polite" style="font-family:var(--font-heading);font-weight:800;font-size:18px">{{ ratingWord }}</span>
+      </div>
+      <sc-if value="{{ ratingErr }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:var(--color-accent-700)">Choose a star rating — tap a star or use the arrow keys.</span></sc-if>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px">
+      <div class="field">
+        <label for="pi-name">Your name <span style="color:var(--color-accent-700)">*</span></label>
+        <input id="pi-name" class="input" value="{{ fName }}" onChange="{{ setName }}" onBlur="{{ blurName }}" maxLength="60" autoComplete="name" aria-invalid="{{ nameErr }}" style="min-height:44px">
+        <sc-if value="{{ nameErr }}" hint-placeholder-val="{{ false }}"><span role="alert" style="display:block;margin-top:5px;font-size:13px;color:var(--color-accent-700)">Add your name so others know who's talking.</span></sc-if>
+      </div>
+      <div class="field">
+        <label for="pi-title">Title <span style="color:var(--color-neutral-600)">(optional)</span></label>
+        <input id="pi-title" class="input" value="{{ fTitle }}" onChange="{{ setTitle }}" maxLength="100" placeholder="Sum it up in a line" style="min-height:44px">
+      </div>
+    </div>
+
+    <div class="field">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><label for="pi-text">Your review <span style="color:var(--color-accent-700)">*</span></label><span aria-live="polite" style="font-size:12px;font-variant-numeric:tabular-nums;color:{{ counterColor }}">{{ counter }}</span></div>
+      <textarea id="pi-text" class="input" value="{{ fText }}" onChange="{{ setText }}" onBlur="{{ blurText }}" maxLength="1000" rows="5" aria-invalid="{{ textErr }}" aria-describedby="pi-text-hint" placeholder="What did you eat? How was the service? Would you go back?" style="min-height:130px"></textarea>
+      <span id="pi-text-hint" style="display:block;margin-top:5px;font-size:13px;color:{{ textHintColor }}">{{ textHint }}</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">Visit type</span>
+      <div class="seg" role="radiogroup" aria-label="Visit type" style="display:flex;max-width:420px">
+        <sc-for list="{{ visitOpts }}" as="o" hint-placeholder-count="3"><label class="seg-opt" style="flex:1;min-height:44px"><input type="radio" name="pi-visit" checked="{{ o.checked }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">Dishes you tried <span style="color:var(--color-neutral-600)">(optional)</span></span>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <sc-for list="{{ dishChips }}" as="ch" hint-placeholder-count="4"><button type="button" aria-pressed="{{ ch.on }}" onClick="{{ ch.toggle }}" style="min-height:40px;padding:0 12px;border:1px solid {{ ch.border }};background:{{ ch.bg }};color:{{ ch.fg }};cursor:pointer;font:13px var(--font-body)">{{ ch.name }}</button></sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">Rate the details <span style="color:var(--color-neutral-600)">(optional)</span></span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:0 24px;border-top:1px solid var(--color-divider)">
+        <sc-for list="{{ subRows }}" as="sr" hint-placeholder-count="4">
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--color-divider);min-height:48px">
+            <span style="font-size:14px">{{ sr.label }}</span>
+            <div role="group" aria-label="{{ sr.aria }}" style="display:flex">
+              <sc-for list="{{ sr.stars }}" as="ss" hint-placeholder-count="5"><button type="button" aria-label="{{ ss.aria }}" aria-pressed="{{ ss.on }}" onClick="{{ ss.onClick }}" style="width:36px;height:44px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:{{ ss.stroke }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{ ss.fill }}" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></button></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">Photos <span style="color:var(--color-neutral-600)">(up to 3)</span></span>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <sc-for list="{{ formPhotos }}" as="fp" hint-placeholder-count="0">
+          <div style="position:relative;width:88px;height:88px">
+            <img class="grayscale" src="{{ fp.src }}" alt="{{ fp.alt }}" style="width:88px;height:88px;object-fit:cover">
+            <button type="button" onClick="{{ fp.remove }}" aria-label="{{ fp.removeLabel }}" style="position:absolute;top:0;right:0;width:28px;height:28px;border:0;background:var(--color-text);color:var(--color-bg);display:grid;place-items:center;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+        </sc-for>
+        <sc-if value="{{ canAddPhoto }}" hint-placeholder-val="{{ true }}">
+          <label style="width:88px;height:88px;border:1px dashed var(--color-divider);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;font-size:11px;color:var(--color-neutral-700)" style-hover="border-color:var(--color-text);color:var(--color-text)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M16 5h6"></path><path d="M19 2v6"></path><path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"></path><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path><circle cx="9" cy="9" r="2"></circle></svg>Add photo
+            <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ addPhotos }}" style="position:absolute;width:1px;height:1px;opacity:0">
+          </label>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;border-top:2px solid var(--color-text);padding-top:16px">
+      <span style="flex:1 1 200px;font-size:13px;color:var(--color-neutral-700)">{{ submitHint }}</span>
+      <button type="button" class="btn btn-secondary" onClick="{{ closeForm }}" style="min-height:48px">Cancel</button>
+      <button type="submit" class="btn btn-primary" disabled="{{ submitDisabled }}" style="min-height:48px;min-width:180px;justify-content:flex-start;font-size:15px">{{ submitLabel }}</button>
+    </div>
+  </form>
+</div>
+</sc-if>
+
+<sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+<div class="dialog-backdrop" onClick="{{ cancelDelete }}" style="z-index:60">
+  <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="pi-del-title" onClick="{{ stop }}" style="background:var(--color-bg);border-top:6px solid var(--color-text)">
+    <div id="pi-del-title" class="dialog-title">Delete this review?</div>
+    <div class="dialog-body">Your rating for {{ confirmRest }} will be removed and the average recalculated. This can't be undone.</div>
+    <div class="dialog-actions">
+      <button class="btn btn-secondary" onClick="{{ cancelDelete }}" style="min-height:44px">Keep it</button>
+      <button class="btn btn-primary" onClick="{{ doDelete }}" style="min-height:44px">Delete review</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+  <div role="status" style="position:fixed;left:16px;bottom:88px;z-index:70;max-width:calc(100vw - 32px);display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--color-text);color:var(--color-bg);box-shadow:var(--shadow-lg);font-size:14px;font-weight:600;border-left:6px solid var(--color-accent)">{{ toast }}</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;colorRatings&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Display&quot;},&quot;plateStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;number&quot;,&quot;monogram&quot;],&quot;default&quot;:&quot;number&quot;,&quot;tsType&quot;:&quot;'number' | 'monogram'&quot;,&quot;section&quot;:&quot;Display&quot;}}">
+const DAY = 864e5, NOW = Date.now();
+const R = [
+  {id:'r1',name:'Saffron Courtyard',cuisines:['North Indian'],priceRange:2,area:'Indiranagar',address:'14, 12th Main, HAL 2nd Stage, Indiranagar',hours:[12,23.5],isVeg:false,popularDishes:['Dal Makhani','Paneer Tikka','Butter Naan','Rogan Josh'],addedAt:'2024-02-11'},
+  {id:'r2',name:'Banana Leaf Tiffin Co.',cuisines:['South Indian'],priceRange:1,area:'Basavanagudi',address:'88, DVG Road, Basavanagudi',hours:[6.5,22],isVeg:true,popularDishes:['Masala Dosa','Ghee Podi Idli','Filter Coffee','Rava Vada'],addedAt:'2023-08-02'},
+  {id:'r3',name:'Red Lantern Wok',cuisines:['Chinese'],priceRange:2,area:'Koramangala',address:'5th Block, 80 Feet Road, Koramangala',hours:[12,23],isVeg:false,popularDishes:['Hakka Noodles','Chilli Garlic Prawns','Dim Sum Basket','Kung Pao Tofu'],addedAt:'2025-01-20'},
+  {id:'r4',name:'Trattoria Lucca',cuisines:['Italian'],priceRange:3,area:'Lavelle Road',address:'3, Lavelle Road, Ashok Nagar',hours:[12.5,23.5],isVeg:false,popularDishes:['Cacio e Pepe','Wood-fired Margherita','Burrata','Tiramisu'],addedAt:'2025-06-14'},
+  {id:'r5',name:'Morning Ledger Café',cuisines:['Cafe'],priceRange:2,area:'HSR Layout',address:'27th Main, Sector 1, HSR Layout',hours:[7.5,21],isVeg:false,popularDishes:['Shakshuka','Almond Croissant','Cold Brew','Avocado Toast'],addedAt:'2025-09-03'},
+  {id:'r6',name:"Nawab's Dum House",cuisines:['Biryani','North Indian'],priceRange:2,area:'Frazer Town',address:'Mosque Road, Frazer Town',hours:[12,25],isVeg:false,popularDishes:['Mutton Dum Biryani','Chicken 65','Mirchi ka Salan','Double ka Meetha'],addedAt:'2024-11-09'},
+  {id:'r7',name:'Chowpatty Corner',cuisines:['Street Food'],priceRange:1,area:'Jayanagar',address:'11th Main, 4th Block, Jayanagar',hours:[16,23],isVeg:true,popularDishes:['Pani Puri','Pav Bhaji','Dahi Puri','Vada Pav'],addedAt:'2022-05-18'},
+  {id:'r8',name:'Kulfi & Co.',cuisines:['Desserts'],priceRange:1,area:'Malleshwaram',address:'8th Cross, Sampige Road, Malleshwaram',hours:[11,23.5],isVeg:true,popularDishes:['Malai Kulfi','Rose Falooda','Rabri Jalebi','Pista Kulfi'],addedAt:'2024-04-27'},
+  {id:'r9',name:'Tandoor Line',cuisines:['North Indian','Biryani'],priceRange:3,area:'MG Road',address:'Level 2, 40 MG Road',hours:[19,24],isVeg:false,popularDishes:['Galouti Kebab','Murgh Malai Tikka','Lucknowi Biryani','Sheermal'],addedAt:'2026-02-15'},
+  {id:'r10',name:'Sundal Street',cuisines:['South Indian','Street Food'],priceRange:1,area:'Malleshwaram',address:'15th Cross, Margosa Road, Malleshwaram',hours:[15,22],isVeg:true,popularDishes:['Kuzhi Paniyaram','Mysore Bonda','Neer Dosa','Sundal Cup'],addedAt:'2026-07-01'}
+];
+const S = {
+  r1:[['Aarav Menon',5,'The dal alone is worth the trip','Slow-cooked dal makhani that tastes like it sat on the coals overnight. Naan arrived blistered and buttery. Service was quick even on a Saturday.','Dine-in',['Dal Makhani','Butter Naan'],3,14,{food:5,service:4,ambience:4,value:4}],['Ishita Rao',4,'','Paneer tikka was smoky and well marinated. Slightly pricey for portion size but no complaints on taste.','Dine-in',['Paneer Tikka'],11,6],['Kabir Sethi',3,'Good food, long wait','Rogan josh was tender, but we waited 40 minutes for a table despite booking. Ask for the courtyard seating if you go.','Dine-in',['Rogan Josh'],26,9],['Neha Pillai',4,'','Delivery arrived hot and well packed.','Delivery',[],44,2]],
+  r2:[['Varun Iyer',5,'Breakfast perfection','Crisp masala dosa, a properly strong filter coffee, and the bill came to less than a movie ticket. Go before 8 to skip the queue.','Dine-in',['Masala Dosa','Filter Coffee'],1,21,{food:5,service:4,ambience:3,value:5}],['Meera Krishnan',5,'','Ghee podi idli is dangerous. I ordered a second plate without thinking.','Dine-in',['Ghee Podi Idli'],6,12],['Rohan Bhat',4,'','Reliable and fast. Vada was a little oily today, chutneys are excellent as always.','Takeaway',['Rava Vada'],15,4],['Diya Shetty',3,'Crowded','Food is great but it is standing room only after 9am. Not a place to sit and chat.','Dine-in',[],38,3],['Pranav Rao',5,'','Thirty years of the same recipe and it shows.','Dine-in',['Masala Dosa'],70,8]],
+  r3:[['Tanvi Desai',4,'Solid Indo-Chinese','Chilli garlic prawns had real heat and the noodles were not greasy. Dim sum was average — stick to the wok dishes.','Dine-in',['Chilli Garlic Prawns','Hakka Noodles','Dim Sum Basket'],4,7],['Arjun Nair',2,'Cold on arrival','Ordered via delivery, everything came lukewarm and the noodles had clumped. Might try dining in instead.','Delivery',['Hakka Noodles'],9,5],['Sana Qureshi',3,'','Decent, nothing memorable. Kung pao tofu was a little sweet for my taste.','Dine-in',['Kung Pao Tofu'],21,1]],
+  r4:[['Rhea Fernandes',5,'Best cacio e pepe in town','Silky, peppery, properly emulsified — no cream shortcuts. Burrata was fresh and the staff knew their wine list. A special-occasion place.','Dine-in',['Cacio e Pepe','Burrata'],2,18,{food:5,service:5,ambience:5,value:3}],['Siddharth Kapoor',4,'','Margherita had a lovely leopard-spotted crust. Expensive, but you get what you pay for.','Dine-in',['Wood-fired Margherita'],12,6],['Ananya Gupta',3,'Lovely room, uneven food','The tiramisu was outstanding, the risotto underseasoned. Service was attentive but slow between courses.','Dine-in',['Tiramisu'],29,4],['Vikram Reddy',4,'','Good date-night spot. Book ahead.','Dine-in',[],55,2]],
+  r5:[['Kavya Murthy',4,'My work-from-café spot','Good wifi, plenty of plugs, and the cold brew is strong without being bitter. Shakshuka is generous.','Dine-in',['Cold Brew','Shakshuka'],5,9],['Aditya Joshi',3,'','Croissant was more bread than pastry. Coffee is good.','Takeaway',['Almond Croissant'],17,3],['Zara Sheikh',4,'','Calm on weekday mornings, chaos on weekends. Staff are friendly either way.','Dine-in',['Avocado Toast'],33,5]],
+  r6:[['Faiz Ahmed',5,'Real dum biryani','Sealed handi, fragrant long-grain rice, mutton that falls off the bone. Mirchi ka salan is the right partner. This is the one.','Dine-in',['Mutton Dum Biryani','Mirchi ka Salan'],2,25,{food:5,service:3,ambience:3,value:5}],['Priya Venkat',4,'','Chicken 65 was crisp and spicy. Biryani portion feeds two easily.','Delivery',['Chicken 65','Mutton Dum Biryani'],8,11],['Nikhil Shah',4,'','Late-night saviour — open till 1am and still consistent.','Takeaway',[],19,7],['Ayesha Khan',3,'Too oily this time','Usually love it but the last order was swimming in ghee. Double ka meetha made up for it.','Delivery',['Double ka Meetha'],40,4],['Harsh Agarwal',5,'','Worth the drive across town.','Dine-in',[],62,6],['Mira Thomas',4,'','Great food, cramped seating.','Dine-in',[],90,1]],
+  r7:[['Rahul Jain',4,'Pani puri done right','Crisp puris filled in front of you, the teekha pani has real kick. Pav bhaji is buttery and filling.','Dine-in',['Pani Puri','Pav Bhaji'],3,10],['Simran Kaur',2,'Hygiene concerns','The food tastes good but the counter was messy and plates were reused without a proper wash. Hope they sort it out.','Dine-in',[],13,13],['Yash Patel',4,'','Dahi puri is the star. Cheap, fast, and always busy.','Takeaway',['Dahi Puri'],24,3],['Leela Naidu',3,'','Vada pav was decent, not Mumbai-level.','Takeaway',['Vada Pav'],48,2]],
+  r8:[['Devika Hegde',5,'Kulfi like my grandmother made','Dense, not icy, with real pistachio. The rose falooda is a meal on its own.','Dine-in',['Pista Kulfi','Rose Falooda'],1,8],['Omkar Kulkarni',4,'','Rabri jalebi is excellent when the jalebi is fresh — ask for a new batch.','Dine-in',['Rabri Jalebi'],10,4],['Fatima Siddiqui',4,'','Lovely after-dinner stop on Sampige Road.','Takeaway',['Malai Kulfi'],31,2]],
+  r9:[['Aryan Malhotra',5,'Galouti that melts','The galouti kebab genuinely dissolves. Sheermal was warm and fragrant. Pricey but the kitchen is serious.','Dine-in',['Galouti Kebab','Sheermal'],6,9,{food:5,service:4,ambience:4,value:3}],['Nandini Rao',2,'Overpriced','Two kebabs and a biryani came to nearly ₹4000. The biryani was dry. Ambience is nice, food did not match the price.','Dine-in',['Lucknowi Biryani'],14,7],['Karthik S',3,'','Murgh malai tikka was good, service was patchy on a weeknight.','Dine-in',['Murgh Malai Tikka'],27,2]],
+  r10:[['Gauri Ramesh',4,'Evening snack heaven','Kuzhi paniyaram straight from the pan with a fiery tomato chutney. Mysore bonda is fluffy. Tiny place, big flavour.','Takeaway',['Kuzhi Paniyaram','Mysore Bonda'],2,5],['Sameer Hussain',4,'','Neer dosa is paper thin and the coconut chutney is fresh.','Dine-in',['Neer Dosa'],9,3],['Pooja Bhatt',2,'','Ran out of half the menu by 7pm. Come early.','Dine-in',[],20,4]]
+};
+const SEED = [];
+Object.keys(S).forEach(rid => S[rid].forEach((v, i) => SEED.push({id:'s-'+rid+'-'+i,restaurantId:rid,authorName:v[0],rating:v[1],title:v[2],text:v[3],visitType:v[4],dishes:v[5],createdAt:NOW - v[6]*DAY - (i*3.7+2)*36e5,baseHelpful:v[7],subRatings:v[8]||null,photos:[]})));
+const KEY = 'plateindex.v1', UKEY = 'plateindex.uid';
+let MEM = null, UID = null;
+function loadData(){ try { const s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch(e) {} return MEM; }
+function saveData(d){ MEM = d; try { localStorage.setItem(KEY, JSON.stringify(d)); return true; } catch(e) { return false; } }
+function getUid(){ if (UID) return UID; try { UID = localStorage.getItem(UKEY); if (!UID) { UID = 'u' + Math.random().toString(36).slice(2,10); localStorage.setItem(UKEY, UID); } } catch(e) { UID = UID || 'u' + Math.random().toString(36).slice(2,10); } return UID; }
+const WORDS = ['', 'Poor', 'Below average', 'Average', 'Good', 'Excellent'];
+const SUBS = [['food','Food'],['service','Service'],['ambience','Ambience'],['value','Value']];
+const PRICE_NOTE = ['', 'under ₹500', '₹500–1,500', '₹1,500+'];
+const GOOD = {bg:'oklch(0.50 0.12 150)', fg:'#fff'}, MID = {bg:'oklch(0.82 0.14 82)', fg:'var(--color-text)'}, LOW = {bg:'var(--color-accent-700)', fg:'#fff'};
+function rel(ts){ const s=(Date.now()-ts)/1000; if(s<45) return 'just now'; const m=s/60; if(m<60) return Math.round(m)+' min ago'; const h=m/60; if(h<24) return Math.round(h)+' hr ago'; const d=h/24; if(d<2) return 'yesterday'; if(d<7) return Math.round(d)+' days ago'; if(d<30){const w=Math.round(d/7);return w+' week'+(w>1?'s':'')+' ago';} if(d<365){const mo=Math.max(1,Math.round(d/30));return mo+' month'+(mo>1?'s':'')+' ago';} const y=Math.round(d/365); return y+' year'+(y>1?'s':'')+' ago'; }
+function full(ts){ return new Date(ts).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}); }
+function hm(x){ x = x % 24; return String(Math.floor(x)).padStart(2,'0') + ':' + (x % 1 ? '30' : '00'); }
+function openInfo(h){ const n=new Date(); let t=n.getHours()+n.getMinutes()/60; const o=h[0], c=h[1]; if (c>24 && t+24<c) t+=24; const open=t>=o&&t<c; return {open, label: open ? 'Open · till '+hm(c) : 'Closed · opens '+hm(o), hours: hm(o)+' – '+hm(c)}; }
+function initials(n){ return n.trim().split(/\s+/).slice(0,2).map(p=>p[0]||'').join('').toUpperCase() || '?'; }
+function emptyData(){ return {reviews:[], votes:{}, saved:[], reports:[], lastName:''}; }
+
+class Component extends DCLogic {
+  state = { view:'explore', prevView:'explore', restId:null, search:'', cuisine:'All', minRating:0, price:0, vegOnly:false, sort:'top', reviewSort:'newest', form:null, toast:null, confirmDel:null, loading:true, flash:null, data: Object.assign(emptyData(), loadData() || {}) };
+  starRef = React.createRef();
+  reviewsRef = React.createRef();
+
+  componentDidMount(){
+    getUid();
+    this._l = setTimeout(() => this.setState({loading:false}), 450);
+    this._key = e => { if (e.key === 'Escape') { if (this.state.confirmDel) this.setState({confirmDel:null}); else if (this.state.form) this.setState({form:null}); } };
+    window.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount(){ window.removeEventListener('keydown', this._key); clearTimeout(this._l); clearTimeout(this._t); }
+  componentDidUpdate(_, prev){
+    if (!prev.form && this.state.form) requestAnimationFrame(() => { const b = this.starRef.current && this.starRef.current.querySelector('[tabindex="0"]'); b && b.focus(); });
+  }
+  setData(fn){ const d = fn(this.state.data); const ok = saveData(d); this.setState({data:d}); if (!ok) this.toast('Saved for this session only — browser storage is unavailable or full.'); }
+  toast(msg){ clearTimeout(this._t); this.setState({toast:msg}); this._t = setTimeout(() => this.setState({toast:null}), 3000); }
+  go(view, extra){ this.setState(s => Object.assign({view, prevView: s.view === 'detail' ? s.prevView : s.view}, extra || {})); window.scrollTo(0,0); }
+  openRest(id){ this.go('detail', {restId:id, reviewSort:'newest'}); }
+  toggleSave(id){ this.setData(d => { const has = d.saved.includes(id); return Object.assign({}, d, {saved: has ? d.saved.filter(x=>x!==id) : [id].concat(d.saved)}); }); const has = this.state.data.saved.includes(id); this.toast(has ? 'Removed from Saved' : 'Saved to your shortlist'); }
+  patchForm(p){ this.setState(s => ({form: Object.assign({}, s.form, p)})); }
+  openForm(restId, review){
+    const d = this.state.data;
+    const f = review
+      ? {editId:review.id, restId, rating:review.rating, hover:0, name:review.authorName, title:review.title||'', text:review.text, visitType:review.visitType, dishes:(review.dishes||[]).slice(), sub:Object.assign({food:0,service:0,ambience:0,value:0}, review.subRatings||{}), photos:(review.photos||[]).slice(), saving:false, tried:false, blurText:false, blurName:false}
+      : {editId:null, restId, rating:0, hover:0, name:d.lastName||'', title:'', text:'', visitType:'Dine-in', dishes:[], sub:{food:0,service:0,ambience:0,value:0}, photos:[], saving:false, tried:false, blurText:false, blurName:false};
+    this.setState({form:f});
+  }
+  addPhotos(e){
+    const files = Array.from(e.target.files || []); e.target.value = '';
+    const room = 3 - this.state.form.photos.length; if (room <= 0) return;
+    if (files.length > room) this.toast('Only 3 photos per review — extra files skipped.');
+    files.filter(f => /^image\//.test(f.type)).slice(0, room).forEach(file => {
+      const rd = new FileReader();
+      rd.onload = () => { const img = new Image(); img.onload = () => { const max = 480, k = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas'); c.width = Math.round(img.width*k); c.height = Math.round(img.height*k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); const url = c.toDataURL('image/jpeg', 0.72); this.setState(s => s.form && s.form.photos.length < 3 ? {form: Object.assign({}, s.form, {photos: s.form.photos.concat(url)})} : null); }; img.src = rd.result; };
+      rd.readAsDataURL(file);
+    });
+  }
+  canSubmit(f){ const n = f.text.trim().length; return !!(f.rating && n >= 10 && n <= 1000 && f.name.trim()); }
+  submit(e){
+    e && e.preventDefault();
+    const f = this.state.form; if (!f || f.saving) return;
+    if (!this.canSubmit(f)) { this.patchForm({tried:true}); return; }
+    this.patchForm({saving:true});
+    setTimeout(() => {
+      const now = Date.now();
+      const anySub = SUBS.some(([k]) => f.sub[k]);
+      const clean = {authorName:f.name.trim().slice(0,60), rating:f.rating, title:f.title.trim().slice(0,100), text:f.text.trim().slice(0,1000), visitType:f.visitType, dishes:f.dishes, subRatings: anySub ? f.sub : null, photos:f.photos};
+      const id = f.editId || ('u-' + now.toString(36) + Math.random().toString(36).slice(2,6));
+      this.setData(d => {
+        const reviews = f.editId ? d.reviews.map(r => r.id === id ? Object.assign({}, r, clean, {updatedAt:now}) : r) : [Object.assign({id, restaurantId:f.restId, authorId:getUid(), createdAt:now, baseHelpful:0}, clean)].concat(d.reviews);
+        return Object.assign({}, d, {reviews, lastName:clean.authorName});
+      });
+      this.setState(s => ({form:null, flash:id, reviewSort: f.editId ? s.reviewSort : 'newest'}));
+      this.toast(f.editId ? 'Review updated' : 'Review posted — thanks for the verdict');
+      setTimeout(() => this.setState({flash:null}), 1600);
+      if (this.state.view === 'detail') requestAnimationFrame(() => { const el = this.reviewsRef.current; if (el) window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 76, behavior:'smooth'}); });
+    }, 380);
+  }
+  toggleHelpful(id){
+    const uid = getUid();
+    this.setData(d => { const v = d.votes[id] || []; const nv = v.includes(uid) ? v.filter(x=>x!==uid) : v.concat(uid); return Object.assign({}, d, {votes: Object.assign({}, d.votes, {[id]: nv})}); });
+  }
+  report(id){ if (this.state.data.reports.includes(id)) return; this.setData(d => Object.assign({}, d, {reports: d.reports.concat(id)})); this.toast('Reported — thanks, we’ll take a look.'); }
+  doDelete(){ const id = this.state.confirmDel; this.setData(d => { const votes = Object.assign({}, d.votes); delete votes[id]; return Object.assign({}, d, {reviews: d.reviews.filter(r => r.id !== id), votes}); }); this.setState({confirmDel:null}); this.toast('Review deleted'); }
+
+  renderVals(){
+    const s = this.state, d = s.data, uid = getUid();
+    const colorOn = this.props.colorRatings ?? true;
+    const monogram = (this.props.plateStyle ?? 'number') === 'monogram';
+    const all = SEED.concat(d.reviews).map(r => { const voters = d.votes[r.id] || []; return Object.assign({}, r, {helpfulVoters:voters, helpfulCount:(r.baseHelpful||0) + voters.length}); });
+    const statsOf = rid => { const l = all.filter(r => r.restaurantId === rid); const n = l.length; const sum = l.reduce((a,r) => a + r.rating, 0); return {list:l, n, avg: n ? Math.round(sum/n*10)/10 : 0, dist:[5,4,3,2,1].map(k => l.filter(r => r.rating === k).length)}; };
+    const tone = (avg, n) => !n ? {bg:'var(--color-neutral-200)', fg:'var(--color-text)'} : !colorOn ? {bg:'var(--color-text)', fg:'var(--color-bg)'} : avg >= 4 ? GOOD : avg >= 3 ? MID : LOW;
+    const stats = {}; R.forEach(r => stats[r.id] = statsOf(r.id));
+    const mark = r => monogram ? r.name.replace(/^The\s+/,'')[0] : String(R.indexOf(r)+1).padStart(2,'0');
+    const restById = id => R.find(r => r.id === id);
+
+    const card = r => { const st = stats[r.id], t = tone(st.avg, st.n), oi = openInfo(r.hours), saved = d.saved.includes(r.id);
+      return {id:r.id, name:r.name, mark:mark(r), cuisineMain:r.cuisines.join(' / '), cuisines:r.cuisines, isVeg:r.isVeg, area:r.area,
+        price:'₹'.repeat(r.priceRange), priceDim:'₹'.repeat(3-r.priceRange), avgLabel: st.n ? st.avg.toFixed(1) : 'New', countLabel: st.n + (st.n === 1 ? ' review' : ' reviews'),
+        toneBg:t.bg, toneFg:t.fg, openLabel:oi.label, openDot: oi.open ? GOOD.bg : 'var(--color-neutral-400)',
+        aria: r.name + ', rated ' + (st.n ? st.avg.toFixed(1) : 'none') + ', ' + st.n + ' reviews',
+        saved, saveLabel: saved ? 'Remove ' + r.name + ' from Saved' : 'Save ' + r.name, saveColor: saved ? 'var(--color-accent)' : 'var(--color-text)', saveFill: saved ? 'currentColor' : 'none',
+        open: () => this.openRest(r.id), toggleSave: e => { e.stopPropagation(); this.toggleSave(r.id); }}; };
+
+    const q = s.search.trim().toLowerCase();
+    const filtersActive = !!(q || s.cuisine !== 'All' || s.minRating || s.price || s.vegOnly);
+    let list;
+    if (s.view === 'saved') list = d.saved.map(restById).filter(Boolean);
+    else {
+      list = R.filter(r => (!q || r.name.toLowerCase().includes(q) || r.cuisines.some(c => c.toLowerCase().includes(q)) || r.area.toLowerCase().includes(q))
+        && (s.cuisine === 'All' || r.cuisines.includes(s.cuisine))
+        && (!s.minRating || (stats[r.id].n && stats[r.id].avg >= s.minRating))
+        && (!s.price || r.priceRange === s.price) && (!s.vegOnly || r.isVeg));
+      const by = {top:(a,b) => stats[b.id].avg - stats[a.id].avg || stats[b.id].n - stats[a.id].n, reviewed:(a,b) => stats[b.id].n - stats[a.id].n || stats[b.id].avg - stats[a.id].avg, price:(a,b) => a.priceRange - b.priceRange || stats[b.id].avg - stats[a.id].avg, newest:(a,b) => b.addedAt.localeCompare(a.addedAt)};
+      list = list.slice().sort(by[s.sort]);
+    }
+    const isList = s.view === 'explore' || s.view === 'saved';
+    const cuisineOpts = ['All'].concat([...new Set(R.flatMap(r => r.cuisines))].sort());
+
+    const reviewVM = r => { const mine = r.authorId === uid, voted = r.helpfulVoters.includes(uid), reported = d.reports.includes(r.id), t = tone(r.rating, 1);
+      return {id:r.id, initials:initials(r.authorName), author: r.authorName + (mine ? ' (you)' : ''), avBg: mine ? 'var(--color-accent)' : 'var(--color-text)',
+        rating:r.rating, ratingAria: r.rating + ' out of 5 stars', toneBg:t.bg, toneFg:t.fg, rel:rel(r.createdAt), full: full(r.createdAt) + (r.updatedAt ? ' · edited ' + full(r.updatedAt) : ''), edited:!!r.updatedAt,
+        showDate: () => this.toast('Posted ' + full(r.createdAt)), visitType:r.visitType, title:r.title, hasTitle:!!r.title, text:r.text,
+        dishes:r.dishes||[], hasDishes: !!(r.dishes && r.dishes.length), photos:(r.photos||[]).map((src,i) => ({src, alt:'Photo ' + (i+1) + ' from ' + r.authorName})), hasPhotos: !!(r.photos && r.photos.length),
+        hasSub: !!r.subRatings, sub: r.subRatings ? SUBS.filter(([k]) => r.subRatings[k]).map(([k,l]) => l + ' ' + r.subRatings[k]).join('  ·  ') : '',
+        helpfulCount:r.helpfulCount, voted, mine, helpBg: voted ? 'var(--color-text)' : 'transparent', helpFg: voted ? 'var(--color-bg)' : 'var(--color-text)',
+        helpTitle: mine ? 'You can’t vote on your own review' : voted ? 'Remove your helpful vote' : 'Mark as helpful',
+        onHelpful: () => this.toggleHelpful(r.id), onEdit: () => this.openForm(r.restaurantId, r), onDelete: () => this.setState({confirmDel:r.id}),
+        reported, reportText: reported ? 'Reported' : 'Report', reportAria: reported ? 'Review reported' : 'Report review by ' + r.authorName, onReport: () => this.report(r.id),
+        flashBg: s.flash === r.id ? 'var(--color-accent-100)' : 'transparent'}; };
+
+    let dvm = {};
+    const rest = s.restId && restById(s.restId);
+    if (rest) { const st = stats[rest.id], t = tone(st.avg, st.n), oi = openInfo(rest.hours), saved = d.saved.includes(rest.id), max = Math.max(1, ...st.dist);
+      const sorters = {newest:(a,b) => b.createdAt - a.createdAt, highest:(a,b) => b.rating - a.rating || b.createdAt - a.createdAt, lowest:(a,b) => a.rating - b.rating || b.createdAt - a.createdAt, helpful:(a,b) => b.helpfulCount - a.helpfulCount || b.createdAt - a.createdAt};
+      const toneFor = k => !colorOn ? 'var(--color-text)' : k >= 4 ? GOOD.bg : k === 3 ? MID.bg : LOW.bg;
+      dvm = {name:rest.name, mark:mark(rest), cuisinesStr:rest.cuisines.join(' / ') + ' · ' + rest.area, address:rest.address, hours:oi.hours, openLabel:oi.label, openDot: oi.open ? GOOD.bg : 'var(--color-neutral-400)',
+        price:'₹'.repeat(rest.priceRange), priceDim:'₹'.repeat(3-rest.priceRange), priceNote:PRICE_NOTE[rest.priceRange], diet: rest.isVeg ? 'Pure vegetarian' : 'Veg & non-veg',
+        avgLabel: st.n ? st.avg.toFixed(1) : '—', count:st.n, countLabel: 'Based on ' + st.n + (st.n === 1 ? ' review' : ' reviews'), verdict: st.n ? WORDS[Math.round(st.avg)] : 'Not rated', toneBg:t.bg, toneFg:t.fg,
+        stars:[1,2,3,4,5].map(i => ({fill: i <= Math.round(st.avg) ? 'currentColor' : 'none'})),
+        dist:[5,4,3,2,1].map((k,i) => ({star:k, count:st.dist[i], pct: (st.dist[i]/max*100) + '%', color:toneFor(k), aria: k + ' stars: ' + st.dist[i] + ' reviews'})),
+        dishes:rest.popularDishes.map((n,i) => { const c = st.list.filter(r => (r.dishes||[]).includes(n)).length; return {n:String(i+1).padStart(2,'0'), name:n, mentions: c ? c + (c === 1 ? ' mention' : ' mentions') : ''}; }),
+        reviews:st.list.slice().sort(sorters[s.reviewSort]).map(reviewVM), empty: st.n === 0,
+        saved, saveLabel: saved ? 'Remove from Saved' : 'Save restaurant', saveText: saved ? 'Saved' : 'Save', saveColor: saved ? 'var(--color-accent)' : 'var(--color-text)', saveFill: saved ? 'currentColor' : 'none', toggleSave: () => this.toggleSave(rest.id)}; }
+
+    const mineList = all.filter(r => r.authorId === uid).sort((a,b) => b.createdAt - a.createdAt).map(r => { const t = tone(r.rating,1); const rr = restById(r.restaurantId);
+      return {rating:r.rating, toneBg:t.bg, toneFg:t.fg, restName: rr ? rr.name : 'Unknown', openRest: () => this.openRest(r.restaurantId), rel:rel(r.createdAt), full:full(r.createdAt), visitType:r.visitType, title:r.title, hasTitle:!!r.title, text: r.text.length > 220 ? r.text.slice(0,220) + '…' : r.text, onEdit: () => this.openForm(r.restaurantId, r), onDelete: () => this.setState({confirmDel:r.id})}; });
+
+    const f = s.form; let fv = {formOpen:false};
+    if (f) { const shown = f.hover || f.rating, len = f.text.trim().length, fr = restById(f.restId), ok = this.canSubmit(f);
+      const textErr = (f.tried || f.blurText) && len < 10;
+      fv = {formOpen:true, formKicker: f.editId ? 'Edit your review' : 'Write a review', formRestName: fr ? fr.name : '',
+        formStars:[1,2,3,4,5].map(i => ({checked: f.rating === i, label: i + (i > 1 ? ' stars' : ' star') + ' — ' + WORDS[i], tab: (f.rating ? f.rating === i : i === 1) ? 0 : -1,
+          fill: i <= shown ? 'var(--color-accent)' : 'none', stroke: i <= shown ? 'var(--color-accent)' : 'var(--color-neutral-500)', scale: i <= shown ? 'scale(1.06)' : 'scale(0.9)',
+          onClick: () => this.patchForm({rating:i}), onEnter: () => this.patchForm({hover:i})})),
+        ratingWord: shown ? WORDS[shown] : 'Tap a star', ratingErr: f.tried && !f.rating,
+        fName:f.name, fTitle:f.title, fText:f.text, nameErr: (f.tried || f.blurName) && !f.name.trim(), textErr,
+        counter: f.text.length + ' / 1000', counterColor: f.text.length > 950 ? 'var(--color-accent-700)' : 'var(--color-neutral-700)',
+        textHint: textErr ? 'Write at least 10 characters — ' + (10 - len) + ' to go.' : len < 10 ? 'Minimum 10 characters.' : 'Looks good.', textHintColor: textErr ? 'var(--color-accent-700)' : 'var(--color-neutral-700)',
+        visitOpts:['Dine-in','Delivery','Takeaway'].map(v => ({label:v, checked: f.visitType === v, pick: () => this.patchForm({visitType:v})})),
+        dishChips:(fr ? fr.popularDishes : []).map(n => { const on = f.dishes.includes(n); return {name:n, on, bg: on ? 'var(--color-text)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)', border: on ? 'var(--color-text)' : 'var(--color-divider)', toggle: () => this.patchForm({dishes: on ? f.dishes.filter(x => x !== n) : f.dishes.concat(n)})}; }),
+        subRows:SUBS.map(([k,l]) => ({label:l, aria: l + ' rating', stars:[1,2,3,4,5].map(i => ({on: f.sub[k] === i, aria: l + ' ' + i + ' of 5', fill: i <= f.sub[k] ? 'var(--color-text)' : 'none', stroke: i <= f.sub[k] ? 'var(--color-text)' : 'var(--color-neutral-500)', onClick: () => this.patchForm({sub: Object.assign({}, f.sub, {[k]: f.sub[k] === i ? 0 : i})})}))})),
+        formPhotos:f.photos.map((src,i) => ({src, alt:'Your photo ' + (i+1), removeLabel:'Remove photo ' + (i+1), remove: () => this.patchForm({photos: f.photos.filter((_,j) => j !== i)})})), canAddPhoto: f.photos.length < 3,
+        submitDisabled: !ok || f.saving, submitLabel: f.saving ? 'Saving…' : f.editId ? 'Save changes' : 'Post review',
+        submitHint: ok ? 'Posts publicly under your name.' : !f.rating && len < 10 ? 'Add a star rating and at least 10 characters to post.' : !f.rating ? 'Add a star rating to post.' : len < 10 ? 'Write at least 10 characters to post.' : 'Add your name to post.'}; }
+
+    const confirmR = s.confirmDel && all.find(r => r.id === s.confirmDel);
+    const emptySaved = s.view === 'saved';
+    return Object.assign({
+      isExplore: s.view === 'explore', isSaved: s.view === 'saved', isDetail: s.view === 'detail' && !!rest, isMine: s.view === 'mine', isList,
+      curExplore: s.view === 'explore' ? 'page' : undefined, curSaved: s.view === 'saved' ? 'page' : undefined, curMine: s.view === 'mine' ? 'page' : undefined,
+      lineExplore: s.view === 'explore' ? 'var(--color-accent)' : 'transparent', lineSaved: s.view === 'saved' ? 'var(--color-accent)' : 'transparent', lineMine: s.view === 'mine' ? 'var(--color-accent)' : 'transparent',
+      savedCount: d.saved.length, mineCount: mineList.length, totalRestaurants: R.length,
+      goExplore: () => this.go('explore'), goSaved: () => this.go('saved'), goMine: () => this.go('mine'), goBack: () => this.go(s.prevView === 'detail' ? 'explore' : s.prevView),
+      backLabel: s.prevView === 'saved' ? 'Saved' : s.prevView === 'mine' ? 'My reviews' : 'All restaurants',
+      search:s.search, setSearch: e => this.setState({search:e.target.value}), cuisine:s.cuisine, setCuisine: e => this.setState({cuisine:e.target.value}), cuisineOpts,
+      ratingOpts:[[0,'Any'],[3,'3+'],[4,'4+'],[4.5,'4.5+']].map(([v,l]) => ({label:l, checked: s.minRating === v, pick: () => this.setState({minRating:v})})),
+      priceOpts:[[0,'Any'],[1,'₹'],[2,'₹₹'],[3,'₹₹₹']].map(([v,l]) => ({label:l, checked: s.price === v, pick: () => this.setState({price:v})})),
+      vegOnly:s.vegOnly, toggleVeg: () => this.setState({vegOnly:!s.vegOnly}), vegBg: s.vegOnly ? 'var(--color-text)' : 'transparent', vegFg: s.vegOnly ? 'var(--color-bg)' : 'var(--color-text)', vegKnob: s.vegOnly ? 'flex-end' : 'flex-start',
+      sort:s.sort, setSort: e => this.setState({sort:e.target.value}),
+      filtersActive: s.view === 'explore' && filtersActive, clearFilters: () => this.setState({search:'', cuisine:'All', minRating:0, price:0, vegOnly:false}),
+      resultCount: s.loading ? '—' : list.length, resultNoun: emptySaved ? (list.length === 1 ? 'saved restaurant' : 'saved restaurants') : (list.length === 1 ? 'restaurant' : 'restaurants'),
+      loading: s.loading, skeletons:[1,2,3,4,5,6], cards: list.map(card), showCards: !s.loading && list.length > 0, noResults: !s.loading && list.length === 0,
+      emptyTitle: emptySaved ? 'Nothing saved yet.' : 'No restaurants match.', emptyBody: emptySaved ? 'Tap the bookmark on any restaurant to build a shortlist.' : 'Try a broader search, a lower minimum rating, or clear the filters.',
+      emptyCta: emptySaved ? 'Browse restaurants' : 'Clear filters', emptyAction: emptySaved ? () => this.go('explore') : () => this.setState({search:'', cuisine:'All', minRating:0, price:0, vegOnly:false}),
+      d: dvm, reviewSort:s.reviewSort, setReviewSort: e => this.setState({reviewSort:e.target.value}), reviewsRef:this.reviewsRef,
+      openNew: () => rest && this.openForm(rest.id, null),
+      mine: mineList, mineEmpty: mineList.length === 0, myName: d.lastName || 'guest',
+      starRef:this.starRef, stop: e => e.stopPropagation(), closeForm: () => this.setState({form:null}), submit: e => this.submit(e),
+      clearHover: () => this.patchForm({hover:0}),
+      onStarKey: e => { const cur = this.state.form.rating || 0; let v;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') v = Math.min(5, cur + 1); else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') v = Math.max(1, cur - 1); else if (e.key === 'Home') v = 1; else if (e.key === 'End') v = 5; else return;
+        e.preventDefault(); this.patchForm({rating:v, hover:0}); requestAnimationFrame(() => { const b = this.starRef.current && this.starRef.current.querySelectorAll('button')[v-1]; b && b.focus(); }); },
+      setName: e => this.patchForm({name:e.target.value}), setTitle: e => this.patchForm({title:e.target.value}), setText: e => this.patchForm({text:e.target.value.slice(0,1000)}),
+      blurName: () => this.patchForm({blurName:true}), blurText: () => this.patchForm({blurText:true}), addPhotos: e => this.addPhotos(e),
+      confirmOpen: !!confirmR, confirmRest: confirmR ? (restById(confirmR.restaurantId) || {}).name : '', cancelDelete: () => this.setState({confirmDel:null}), doDelete: () => this.doDelete(),
+      hasToast: !!s.toast, toast: s.toast
+    }, fv);
+  }
+}
+</script>
+</body>
+</html>
